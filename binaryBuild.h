@@ -52,8 +52,8 @@ void writeString(FILE *obFile, gNode rowData);
 
 /** writeBinary
  * function that actually writting the binary code to ob extension file
- * @param num - the prepared number for 14 bytes to write into the file
- * @param address - the prepared address for 14 bytes to write into the file
+ * @param num - the prepared number for 12 bytes to write into the file
+ * @param address - the prepared address for 12 bytes to write into the file
  * @param obFile - the path of opened .ob file
  * */
 void writeBinary(int num, int address, FILE *obFile);

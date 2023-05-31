@@ -282,7 +282,7 @@ void writeBinary(int num, int address, FILE *obFile)
     int numToCompare = pow(2, 13);
     fprintf(obFile, "0%d\t", address + 100);
 
-    while (i < 14)
+    while (i < 12)
     {
         if (num & numToCompare)
             fputs("/", obFile);
