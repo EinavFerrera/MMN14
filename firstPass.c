@@ -108,7 +108,7 @@ void fPass(char *fileName)
 		commandIndex = isCommand(word);
 
 		/*data / string / command / entry / extern*/
-		if (isData(word))
+		if (isData(word)) // !! we need to change the 14 bits to 12
 		{
 
 			L = analyzeData(ptr, &hRow, lineNum);
@@ -135,7 +135,7 @@ void fPass(char *fileName)
 			DC = DC + L;
 			continue;
 		}
-		else if (isString(word))
+		else if (isString(word)) // !! we need to change the 14 bits to 12
 		{
 
 			if (!label)
@@ -167,7 +167,7 @@ void fPass(char *fileName)
 		{
 			if ((commandIndex == 9) || (commandIndex == 10) || (commandIndex == 13))
 			{
-				specialCommand = true;
+				specialCommand = true; // to be notice later !!
 			}
 
 			L = analyzeOperands(specialCommand, ptr, commandIndex, operands, &hSuspectLabel, &hRow, lineNum);
@@ -480,7 +480,7 @@ int analyzeOperands(bool special, char *ptr, int commandIndex, int *operandType,
 	bool secOp = false;
 	bool reg = false;
 
-	gNode rowToBinary = NULL;
+	gNode rowToBinary = NULL; // !! intersting
 	gNode temp = NULL;
 
 	int isImidiate;
@@ -492,10 +492,10 @@ int analyzeOperands(bool special, char *ptr, int commandIndex, int *operandType,
 	char expression[strlen(ptr)];
 
 	strcpy(expression, ptr);
-	rowToBinary = createNode(expression, 0);
+	rowToBinary = createNode(expression, 0); // !! we need to change the 14 bits to 12
 	setLineNum(rowToBinary, lineNum);
 
-	if (!special)
+	if (!special) // !! we dont have special
 	{
 		token = strtok(ptr, delims);
 	}
@@ -619,7 +619,7 @@ int analyzeOperands(bool special, char *ptr, int commandIndex, int *operandType,
 
 int immidiateCheck(char *word, gNode row, int opNum, int lineNum)
 {
-	if (*word == '#')
+	if (*word == '#') //!! check if is digit only ! with - or not
 	{
 		if (numCheck((word + 1), row, opNum) >= 0)
 			return true;

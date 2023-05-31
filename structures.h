@@ -13,8 +13,8 @@ typedef enum types
   EXT,
   JUMP
 } types;
-typedef enum address
-{ /*definition of operands address type*/
+typedef enum address // !! we need to change  immediate 1, direct 3, direct reg 5
+{                    /*definition of operands address type*/
   NO_ADDRESS = -1,
   DIRECT = 1 << 0,
   IMMEDIATE = 1 << 1,
