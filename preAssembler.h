@@ -2,7 +2,7 @@
 #define preAssembler
 #include <stdio.h>
 #include <string.h>
-#include <malloc.h>
+#include <stdlib.h>
 #include <ctype.h>
 
 #define MAXIMUM_FILE_NAME 1000			/* max length of file name  */
