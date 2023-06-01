@@ -285,9 +285,9 @@ void writeBinary(int num, int address, FILE *obFile)
     while (i < 14)
     {
         if (num & numToCompare)
-            fputs("/", obFile);
+            fputs("1", obFile);
         else
-            fputs(".", obFile);
+            fputs("0", obFile);
         i++;
         numToCompare = numToCompare >> 1;
     }

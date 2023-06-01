@@ -217,7 +217,7 @@ void fPass(char *fileName)
 	fclose(modifiedFile);
 }
 
-void emptyIntArray(int array[], int n)
+void emptyIntArray(int array[], int n) // set array to empty
 {
 	int i = 0;
 	for (i = 0; i < n; i++)
@@ -638,16 +638,16 @@ int immidiateCheck(char *word, gNode row, int opNum, int lineNum)
 
 bool isRegister(char *name, gNode row, int index)
 {
-	char reg[2];
+	char reg[3]; // modified from 2 -3, we need register to start with @
 	int i = 0;
-	if (strlen(name) > 2)
+	if (strlen(name) > 3)
 	{
-		if ((endOfLine((name + 2)) != EOL) && (*(name + 2) != ' ') && (*(name + 2) != '\t'))
+		if ((endOfLine((name + 3)) != EOL) && (*(name + 3) != ' ') && (*(name + 3) != '\t'))
 		{
 			false;
 		}
 	}
-	strncpy(reg, name, 2);
+	strncpy(reg, name, 3);
 	while (i < REGISTER_NUM)
 	{
 		if (strcmp(reg, getRegisterName(i)) == 0)
@@ -685,23 +685,13 @@ bool opernadsTypeCheck(gNode row)
 
 		if (getType(row) == JUMP)
 		{
-			if ((i == 1) && (opType != DIRECT))
+			if ((i == 1) && (opType != DIRECT || opType != DIRECT_REG))
 			{
-				printf("ERROR: invalid instrucion declaration - supose to be label after command in line %d\n", getLineNum(row));
-				valid = valid & false;
-			}
-			else if ((i == 2) && (opType == NO_ADDRESS))
-			{
-				printf("ERROR: invalid instrucion declaration - first operand inside brackets supose to be immidiate\\direct\\register in line %d\n", getLineNum(row));
-				valid = valid & false;
-			}
-			else if ((i == 3) && ((opType != IMMEDIATE) && (opType != DIRECT_REG) && (opType != DIRECT)))
-			{
-				printf("ERROR: invalid instrucion declaration - second operand inside brackets supose to be immidiate\\direct\\register in line %d\n", getLineNum(row));
+				printf("ERROR: invalid instrucion declaration - supose to be label\\register after command in line %d\n", getLineNum(row));
 				valid = valid & false;
 			}
 		}
-		else if (getOpNum(getCommand(row)) == 3)
+		else if (getOpNum(getCommand(row)) == 3) // if command has 3 operands
 		{
 			if ((i == 1) && (opType != DIRECT))
 			{

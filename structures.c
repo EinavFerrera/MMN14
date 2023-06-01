@@ -20,11 +20,11 @@ static const struct opcodeTable
 			   {"lea", 2, (DIRECT), (DIRECT + DIRECT_REG)},
 			   {"inc", 1, (NO_ADDRESS), (DIRECT + DIRECT_REG)},
 			   {"dec", 1, (NO_ADDRESS), (DIRECT + DIRECT_REG)},
-			   {"jmp", 3, (NO_ADDRESS), (IMMEDIATE + DIRECT + DIRECT_REG)},
-			   {"bne", 3, (NO_ADDRESS), (IMMEDIATE + DIRECT + DIRECT_REG)},
+			   {"jmp", 1, (NO_ADDRESS), (DIRECT + DIRECT_REG)},
+			   {"bne", 1, (NO_ADDRESS), (DIRECT + DIRECT_REG)},
 			   {"red", 1, (NO_ADDRESS), (DIRECT + DIRECT_REG)},
 			   {"prn", 1, (NO_ADDRESS), (IMMEDIATE + DIRECT + DIRECT_REG)},
-			   {"jsr", 3, (NO_ADDRESS), (IMMEDIATE + DIRECT + DIRECT_REG)},
+			   {"jsr", 1, (NO_ADDRESS), (DIRECT + DIRECT_REG)},
 			   {"rts", 0, (NO_ADDRESS), (NO_ADDRESS)},
 			   {"stop", 0, (NO_ADDRESS), (NO_ADDRESS)}};
 

@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "registertable.h": "c",
+        "binaryto64": "c"
+    }
+}
