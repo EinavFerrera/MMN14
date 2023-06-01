@@ -1,20 +1,19 @@
 #ifndef errors
 #define errors
 
-enum errors
-{
+enum errors{
     INVALID_INSTRUCTOR = -1,
-    MANY_COMMAS = -2,
+    MANY_COMMAS= -2,
     MANY_OPS = -3,
-    SOURCE_NOT_VALID = -4,
+    SOURCE_NOT_VALID= -4,
     DEST_NOT_VALID = -5,
-    TOO_ARGUMENTS_NO_COMMA = -6,
-    COMMA_INSTEAD_NUMBER = -7,
-    MANY_CHARS = -8,
-    NOT_REGISTER = -9,
-    NOT_VALID_STRING = -10,
-    NOT_VALID_INSTRUCTION = -11,
-    TOO_MANY_CHARS = -12,
+    TOO_ARGUMENTS_NO_COMMA=-6,
+    COMMA_INSTEAD_NUMBER=-7, 
+    MANY_CHARS=-8,
+    NOT_REGISTER=-9,
+    NOT_VALID_STRING=-10,
+    NOT_VALID_INSTRUCTION =-11,
+    TOO_MANY_CHARS =-12,
     TOO_MANY_SIGNS = -13,
     SIGN_AFTER_DIGIT = -14,
     NO_COMMA_SEPERATE = -15,

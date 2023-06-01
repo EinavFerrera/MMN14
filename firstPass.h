@@ -1,17 +1,16 @@
 #ifndef firstPass
 #define firstPass
 
-#define MAXIMUM_FILE_NAME 1000 /* max length of file name  */
-#define LINE_LEN 80			   /* max line length */
-#define WORD_LEN 30			   /* max length of word  */
-#define MAXIMUM_INST 7		   /* max length of instructor (.string)  */
+#define MAXIMUM_FILE_NAME 1000 	/* max length of file name  */
+#define LINE_LEN 80			   	/* max line length */
+#define WORD_LEN 30			   	/* max length of word  */
+#define MAXIMUM_INST 7		   	/* max length of instructor (.string)  */
 #define false 0
 #define true 1
 
-typedef int bool; /*definition of boolean variable*/
+typedef int bool;				/*definition of boolean variable*/
 
-enum
-{
+enum{							
 	UNNECESSARY = -1,
 	NOTE,
 	NOT_NOTE,
@@ -44,7 +43,7 @@ void emptyIntArray(int array[], int n);
  * @param wordLength - pointer to the length of word variable
  * @param word - double pointer to word variable
  * */
-void nextExpression(char **ptr, int *count, int *wordLength, char **word);
+void nextExpression(char **ptr,int *count,int *wordLength, char **word);
 
 /** ignoreSpaceTab
  * ignorring spaces and tabs before and after expressions
@@ -58,7 +57,7 @@ void ignoreSpaceTab(char **ptr);
  * @param lineNum - line number in am file (for errors)
  * @return true/false
  * */
-bool validRow(char *ptr, int lineNum); /*checks if the row is empty or note*/
+bool validRow(char *ptr,int lineNum); /*checks if the row is empty or note*/
 
 /** labelCheck
  * checks if the expression is label and valid label
@@ -71,7 +70,7 @@ bool validRow(char *ptr, int lineNum); /*checks if the row is empty or note*/
  * @param lineNum - line number in am file (for errors)
  * @return true/false
  * */
-bool labelCheck(char *ptr, char *word, int count, int wordLength, gNode *hSymbol, gNode temp, int lineNum);
+bool labelCheck(char *ptr,char *word, int count, int wordLength,gNode *hSymbol,gNode temp,int lineNum);
 
 /** validLabel
  * inside function of label check - the function that checks label validity
@@ -81,6 +80,7 @@ bool labelCheck(char *ptr, char *word, int count, int wordLength, gNode *hSymbol
  * @return true/false
  * */
 bool validLabel(gNode *list, char *ptr, int lineNum);
+
 
 /** isEntryExtern
  * checks if the expression is entry or extern declare
@@ -103,32 +103,32 @@ bool isData(char *ptr);
  * */
 bool isString(char *ptr); /*checks if the row is string declare*/
 
-/** isCommand
+/** isCommand											
  * checks if the inserted word (token) is command
  * @param ptr - pointer to the certain word
  * @return true/false
- * */
-bool isCommand(char *ptr);
+ * */  
+bool isCommand (char *ptr);
 
-/** analyzeData
+/** analyzeData											
  * analyzing the numbers are written
  * @param ptr - pointer to the certain expression
  * @param hRow - pointer to the head of linked list of rows
- * @param lineNum - line number in am file (for errors)
+ * @param lineNum - line number in am file (for errors) 
  * @return true/false
- * */
-int analyzeData(char *ptr, gNode *hRow, int lineNum);
+ * */  
+int analyzeData (char *ptr,gNode *hRow, int lineNum);
 
-/** analyzeString
+/** analyzeString											
  * analyzing the letters are written
  * @param ptr - pointer to the certain expression
  * @param hRow - pointer to the head of linked list of rows
- * @param lineNum - line number in am file (for errors)
+ * @param lineNum - line number in am file (for errors) 
  * @return true/false
- * */
-int analyzeString(char *ptr, gNode *hRow, int lineNum);
+ * */  
+int analyzeString (char *ptr,gNode *hRow, int lineNum);
 
-/** analyzeOperands
+/** analyzeOperands											
  * analyzing the all kinds of instruction expressions
  * @param special - flag for special command - jmp/bne/jsr
  * @param ptr - pointer to the certain expression
@@ -136,38 +136,38 @@ int analyzeString(char *ptr, gNode *hRow, int lineNum);
  * @param operandType - updating here the type of each operand
  * @param hSuspectLabel - A double pointer to the top of the linked list of suspect labels to update the labels used
  * @param hRow - A double pointer to the top of the linked list of rows to update the analyzed row
- * @param lineNum - line number in am file (for errors)
+ * @param lineNum - line number in am file (for errors) 
  * @return number of operands including the command itself
- * */
-int analyzeOperands(bool special, char *ptr, int commandIndex, int *operandType, gNode *hSuspectLabel, gNode *hRow, int lineNum);
+ * */  
+int analyzeOperands (bool special, char*ptr,int commandIndex, int *operandType, gNode *hSuspectLabel,gNode *hRow,int lineNum);
 
-/** immidiateCheck
+/** immidiateCheck											
  * checks if the operand has immidiate address
  * @param word - pointer to the analyzed word (operand)
  * @param row - A pointer to the node of the row to update the analyzed row
  * @param opNum - the index of operand
- * @param lineNum - line number in am file (for errors)
+ * @param lineNum - line number in am file (for errors) 
  * @return number of operands including the command itself
- * */
+ * */  
 int immidiateCheck(char *word, gNode row, int opNum, int lineNum);
 
-/** isRegister
+/** isRegister											
  * checks if the operands register
  * @param name - pointer to expression (operand)
  * @param row - A pointer to the node of the row - all the data of the row is alredy here
  * @param index - index of operand 1-3
  * @return true/false
- * */
-bool isRegister(char *name, gNode row, int index);
+ * */  
+bool isRegister(char *name,gNode row,int index);
 
-/** opernadsTypeCheck
+/** opernadsTypeCheck											
  * checks if the operands valid by type
  * @param row - A pointer to the node of the row - all the data of the row is alredy here
  * @return true/false
- * */
+ * */  
 bool opernadsTypeCheck(gNode row);
 
-/** checkValidInstrucion
+/** checkValidInstrucion											
  * Checks the instruction structure is valid - number of opernads, spaces and tabs at the right place etc.
  * @param ptr - pointer to the certain expression
  * @param opNum - the index of operand
@@ -175,40 +175,40 @@ bool opernadsTypeCheck(gNode row);
  * @param operandType - updating here the type of each operand
  * @param lineNum - line number in am file (for errors)
  * @return true/false
- * */
-bool checkValidInstrucion(char *ptr, int opNum, int commandIndex, int *operandType, int lineNum);
+ * */  
+bool checkValidInstrucion(char*ptr, int opNum, int commandIndex,int *operandType,int lineNum);
 
-/** isSigns
+/** isSigns											
  * Checks if the first char in the expression has ':' '(' ')' ',' ' " '
  * @param ptr - pointer to the certain expression
  * @return true/false
- * */
+ * */  
 bool isSigns(char *ptr);
 
-/** numCheck
+/** numCheck											
  * extract the number between the commas
  * @param ptr - pointer to the certain expression
  * @param row - A pointer to the node of the row - all the data of the row is alredy here
  * @param opNum - the index of operand
  * @return true/false
- * */
-int numCheck(char *ptr, gNode row, int opNum);
+ * */  
+int numCheck(char *ptr,gNode row, int opNum);
 
-/** wordLen
+/** wordLen											
  * extract the exact chars count of certain expression without '"' , spaces and tabs
  * @param ptr - pointer to the certain expression
  * @return length of word/expression
  * */
 int wordLen(char *ptr);
 
-/** endOfLine
+/** endOfLine											
  * checks if the certain place (pointer) is end of line
  * @param ptr - pointer to the certain expression
  * @return enum{EOL/NOT_EOL} EOL - end of line
  * */
 int endOfLine(char *ptr);
 
-/** addICtoDataAddress
+/** addICtoDataAddress											
  * after the whole process of first pass - adding the instrucor counter to data counter
  * - data will come after instructions in ob fil
  * @param HEAD - head of symbol and row lists

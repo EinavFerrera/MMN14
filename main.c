@@ -2,12 +2,12 @@
 
 int main(int argc, char *argv[])
 {
-	if (argc == 1)
+	if(argc == 1)
 	{
 		printf("Please enter a name of file!\n");
 		return 0;
 	}
-
+	
 	/*loop that call compiling method for each file*/
 	else
 	{

@@ -2,7 +2,6 @@
 #include "preAssembler.h"
 #include "firstPass.h"
 #include "errors.h"
-void extractMcr(gNode, char **, FILE **);
 
 void compileFile(char *fileName)
 {
