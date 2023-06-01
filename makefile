@@ -1,5 +1,5 @@
-assembler: main.o preAssembler.o structures.o firstPass.o registerTable.o binaryBuild.o secPass.o
-	gcc *.c -Wall -ansi -pedantic -o assembler
+assembler: main.o preAssembler.o structures.o firstPass.o registerTable.o binaryBuild.o secPass.o binaryTo64.o
+	gcc *.c -Wall -ansi -pedantic -o assembler -lm
 main.o: main.c preAssembler.h
 	gcc main.c -Wall -ansi -pedantic -c
 preAssembler.o: preAssembler.c preAssembler.h firstPass.h errors.h structures.h
@@ -14,3 +14,5 @@ registerTable.o: registerTable.c registerTable.h
 	gcc registerTable.c -Wall -ansi -pedantic -c
 binaryBuild.o: binaryBuild.c binaryBuild.h structures.h firstPass.h
 	gcc binaryBuild.c -Wall -ansi -pedantic -c
+binaryTo64.o: binaryTo64.c binaryBuild.h structures.h firstPass.h
+	gcc binaryTo64.c -Wall -ansi -pedantic -c

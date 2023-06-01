@@ -24,6 +24,13 @@ enum
 	NOT_DATA
 };
 
+/** buildFromBinary
+ * converts the binary code to base 64
+ * @param obFile - the binary file
+ * @param IC - the number of lines in IC part
+ * */
+void buildFromBinary(FILE *obFile, int IC);
+
 /** fPass
  * first pass
  * @param fileName - the name of file as written in terminal

@@ -8,10 +8,11 @@
 #include "firstPass.h"
 #include "registerTable.h"
 
-void binaryCode(FILE *obFile, gNode rowData, gNode labels)
+void binaryCode(FILE *obFile, gNode rowData, gNode labels, int IC)
 {
     writeCODE(obFile, rowData, labels);
     DATAparts(obFile, rowData);
+    buildFromBinary(obFile, IC);
     printf("\tob file was created successfully\n");
 }
 
@@ -280,7 +281,6 @@ void writeBinary(int num, int address, FILE *obFile)
 {
     int i = 0;
     int numToCompare = pow(2, 13);
-    fprintf(obFile, "0%d\t", address + 100);
 
     while (i < 14)
     {

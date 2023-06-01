@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "registertable.h": "c",
-        "binaryto64": "c"
+        "firstpass.h": "c",
+        "binarybuild.h": "c"
     }
 }

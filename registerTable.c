@@ -6,7 +6,7 @@ static const struct registersTable
 {
     const char *name;
     int num;
-} registers[] = {{"@r0", 0}, // added @ to registers
+} registers[] = {{"@r0", 0}, /* added @ to registers */
                  {"@r1", 1},
                  {"@r2", 2},
                  {"@r3", 3},

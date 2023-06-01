@@ -73,9 +73,9 @@ void secPass(char *fileName, gNode *hRow, gNode *hSuspectLabel, gNode *hSymbol, 
 	/**************************create an ob file********************************/
 	sprintf(filePath, "%s.ob", fileName);
 	binaryFile = fopen(filePath, "w");
-	fprintf(binaryFile, "\t%d\t%d\n", IC, DC);
+	fprintf(binaryFile, "%d%d", IC, DC);
 
-	binaryCode(binaryFile, *hRow, *hSymbol);
+	binaryCode(binaryFile, *hRow, *hSymbol, IC);
 	fclose(binaryFile);
 	/***************************************************************************/
 

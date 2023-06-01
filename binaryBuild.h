@@ -5,14 +5,6 @@
 #define true 1                 /*boolean true*/
 #define MAXIMUM_FILE_NAME 1000 /* max length of file name  */
 
-/** binaryCode
- * main function for building the binary code for ob file
- * @param obFile - pointer to opened ob extension file - writting to this file the binary code
- * @param rowData - list of rows
- * @param labels - list of labels
- * */
-void binaryCode(FILE *obFile, gNode rowData, gNode labels);
-
 /** writeCODE
  * function that arranging the binary code of CODE type instruction
  * @param obFile - pointer to opened ob extension file - writting to this file the binary code
@@ -20,6 +12,15 @@ void binaryCode(FILE *obFile, gNode rowData, gNode labels);
  * @param labels - list of labels
  * */
 void writeCODE(FILE *obFile, gNode rowData, gNode labels);
+
+/** binaryCode
+ * main function for building the binary code for ob file
+ * @param obFile - pointer to opened ob extension file - writting to this file the binary code
+ * @param rowData - list of rows
+ * @param labels - list of labels
+ * @param IC - number of IC in the end file
+ */
+void binaryCode(FILE *obFile, gNode rowData, gNode labels, int IC);
 
 /** DATAparts
  * function that preparing the binary code of DATA type instruction

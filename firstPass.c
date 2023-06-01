@@ -108,7 +108,7 @@ void fPass(char *fileName)
 		commandIndex = isCommand(word);
 
 		/*data / string / command / entry / extern*/
-		if (isData(word)) // !! we need to change the 14 bits to 12
+		if (isData(word)) /* !! we need to change the 14 bits to 12*/
 		{
 
 			L = analyzeData(ptr, &hRow, lineNum);
@@ -135,7 +135,7 @@ void fPass(char *fileName)
 			DC = DC + L;
 			continue;
 		}
-		else if (isString(word)) // !! we need to change the 14 bits to 12
+		else if (isString(word)) /* !! we need to change the 14 bits to 12*/
 		{
 
 			if (!label)
@@ -167,7 +167,7 @@ void fPass(char *fileName)
 		{
 			if ((commandIndex == 9) || (commandIndex == 10) || (commandIndex == 13))
 			{
-				specialCommand = true; // to be notice later !!
+				specialCommand = true; /* to be notice later !! */
 			}
 
 			L = analyzeOperands(specialCommand, ptr, commandIndex, operands, &hSuspectLabel, &hRow, lineNum);
@@ -217,7 +217,7 @@ void fPass(char *fileName)
 	fclose(modifiedFile);
 }
 
-void emptyIntArray(int array[], int n) // set array to empty
+void emptyIntArray(int array[], int n) /* set array to empty */
 {
 	int i = 0;
 	for (i = 0; i < n; i++)
@@ -480,7 +480,7 @@ int analyzeOperands(bool special, char *ptr, int commandIndex, int *operandType,
 	bool secOp = false;
 	bool reg = false;
 
-	gNode rowToBinary = NULL; // !! intersting
+	gNode rowToBinary = NULL; /* !! intersting*/
 	gNode temp = NULL;
 
 	int isImidiate;
@@ -492,10 +492,10 @@ int analyzeOperands(bool special, char *ptr, int commandIndex, int *operandType,
 	char expression[strlen(ptr)];
 
 	strcpy(expression, ptr);
-	rowToBinary = createNode(expression, 0); // !! we need to change the 14 bits to 12
+	rowToBinary = createNode(expression, 0); /* !! we need to change the 14 bits to 12*/
 	setLineNum(rowToBinary, lineNum);
 
-	if (!special) // !! we dont have special
+	if (!special) /* !! we dont have special*/
 	{
 		token = strtok(ptr, delims);
 	}
@@ -619,7 +619,7 @@ int analyzeOperands(bool special, char *ptr, int commandIndex, int *operandType,
 
 int immidiateCheck(char *word, gNode row, int opNum, int lineNum)
 {
-	if (*word == '#') //!! check if is digit only ! with - or not
+	if (*word == '#') /* check if is digit only ! with - or not */
 	{
 		if (numCheck((word + 1), row, opNum) >= 0)
 			return true;
@@ -638,7 +638,7 @@ int immidiateCheck(char *word, gNode row, int opNum, int lineNum)
 
 bool isRegister(char *name, gNode row, int index)
 {
-	char reg[3]; // modified from 2 -3, we need register to start with @
+	char reg[3]; /* modified from 2 -3, we need register to start with @ */
 	int i = 0;
 	if (strlen(name) > 3)
 	{
@@ -691,7 +691,7 @@ bool opernadsTypeCheck(gNode row)
 				valid = valid & false;
 			}
 		}
-		else if (getOpNum(getCommand(row)) == 3) // if command has 3 operands
+		else if (getOpNum(getCommand(row)) == 3) /* if command has 3 operands */
 		{
 			if ((i == 1) && (opType != DIRECT))
 			{
