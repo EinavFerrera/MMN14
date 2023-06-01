@@ -300,8 +300,9 @@ bool validLabel(gNode *list, char *ptr, int lineNum)
 			printf("ERROR: Too many letters in label (above 30) in line %d\n", lineNum);
 			return false;
 		}
-		if (!isalpha(*(ptr + i)) && (!isdigit(*(ptr + i))) && ((endOfLine(ptr + i)) != EOL))
+		if (!isalpha(*(ptr + i)) && (!isdigit(*(ptr + i))) && ((endOfLine(ptr + i)) != EOL) && (*(ptr + i) != '@') && (*(ptr + i) != '-'))
 		{
+			printf("this is:%c\n", *(ptr + i));
 			printf("ERROR: The label '%s' contains not only numbers or letters in line %d\n", ptr, lineNum);
 			return false;
 		}
