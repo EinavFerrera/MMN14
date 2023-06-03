@@ -1,7 +1,0 @@
-{
-    "files.associations": {
-        "registertable.h": "c",
-        "firstpass.h": "c",
-        "binarybuild.h": "c"
-    }
-}

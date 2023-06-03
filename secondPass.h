@@ -25,7 +25,7 @@ void secPass(char *fileName, gNode *hRow, gNode *hSuspectLabel, gNode *hSymbol, 
  * @param hEntryExtern - list of entry and extern labels
  * @param entFile - pointer to opened .ent file
  * */
-void createEntFile(gNode hEntryExtern, gNode hSymbols, FILE *entFile);
+int createEntFile(gNode hEntryExtern, gNode hSymbols, FILE *entFile);
 
 /** createExtFile
  * creating .ext extenssion file for all the extern labels and was declared
@@ -33,7 +33,7 @@ void createEntFile(gNode hEntryExtern, gNode hSymbols, FILE *entFile);
  * @param hEntryExtern - list of entry and extern labels
  * @param entFile - pointer to opened .ent file
  * */
-void createExtFile(gNode hEntryExtern, gNode hSymbols, FILE *extFile);
+int createExtFile(gNode hEntryExtern, gNode hSymbols, FILE *extFile);
 
 /** updateEntExtInSymbols
  * setting the A/R/E value inside each label in the list

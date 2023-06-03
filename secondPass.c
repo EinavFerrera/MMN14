@@ -44,30 +44,38 @@ void secPass(char *fileName, gNode *hRow, gNode *hSuspectLabel, gNode *hSymbol, 
 		count = 0;
 		sprintf(filePath, "%s.ent", fileName);
 		entFile = fopen(filePath, "w");
-		createEntFile(*hEntryExtern, *hSymbol, entFile);
+		count = createEntFile(*hEntryExtern, *hSymbol, entFile);
+
 		fclose(entFile);
 	}
 	/***************************************************************************/
 
 	/**************************create an ext file*******************************/
 	temp = *hEntryExtern;
+	printf("yes?\n");
 	while (temp != NULL)
 	{
+
 		if (getType(temp) == EXT)
 		{
-			if (search(hSymbol, getName(*hEntryExtern)) != NULL)
+			if (search(hSymbol, getName(temp)) != NULL)
+			{
 				count++;
+			}
 		}
 		temp = getNext(temp);
 	}
+
 	if (count > 0)
 	{
 		count = 0;
 		sprintf(filePath, "%s.ext", fileName);
 		extFile = fopen(filePath, "w");
-		createExtFile(*hEntryExtern, *hSymbol, extFile);
+		count = createExtFile(*hEntryExtern, *hSymbol, extFile);
 		fclose(extFile);
 	}
+	printf("this !?:_%d_\n", count);
+
 	/***************************************************************************/
 
 	/**************************create an ob file********************************/
@@ -83,28 +91,30 @@ void secPass(char *fileName, gNode *hRow, gNode *hSuspectLabel, gNode *hSymbol, 
 	printf("\n******************************************************************************************\n");
 }
 
-void createEntFile(gNode hEntryExtern, gNode hSymbols, FILE *entFile)
+int createEntFile(gNode hEntryExtern, gNode hSymbols, FILE *entFile)
 {
 	if (hEntryExtern == NULL)
 	{
 		printf("\tent file was created successfully\n");
-		return;
+		return 0;
 	}
 	createEntFile(getNext(hEntryExtern), hSymbols, entFile);
 	if (getType(hEntryExtern) == ENTRY)
 	{
 		if (search(&hSymbols, getName(hEntryExtern)) != NULL)
+		{
 			fprintf(entFile, "%s\t0%d\n", getName(hEntryExtern), 100 + getAddress(search(&hSymbols, getName(hEntryExtern))));
+		}
 	}
-	return;
+	return 0;
 }
 
-void createExtFile(gNode hEntryExtern, gNode hSymbols, FILE *extFile)
+int createExtFile(gNode hEntryExtern, gNode hSymbols, FILE *extFile)
 {
 	if (hEntryExtern == NULL)
 	{
 		printf("\text file was created successfully\n");
-		return;
+		return 0;
 	}
 	createExtFile(getNext(hEntryExtern), hSymbols, extFile);
 	if (getType(hEntryExtern) == EXT)
@@ -114,7 +124,7 @@ void createExtFile(gNode hEntryExtern, gNode hSymbols, FILE *extFile)
 			fprintf(extFile, "%s\t0%d\n", getName(hEntryExtern), 100 + getAddress(search(&hSymbols, getName(hEntryExtern))));
 		}
 	}
-	return;
+	return 0;
 }
 
 void updateEntExtInSymbols(gNode *hEntExt, gNode *hSymbol)

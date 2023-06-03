@@ -165,9 +165,9 @@ void fPass(char *fileName)
 		}
 		else if (commandIndex >= 0)
 		{
-			if ((commandIndex == 9) || (commandIndex == 10) || (commandIndex == 13))
+			/*if ((commandIndex == 9) || (commandIndex == 10) || (commandIndex == 13))*/
 			{
-				specialCommand = true; /* to be notice later !! */
+				/*specialCommand = true; to be notice later !! */
 			}
 
 			L = analyzeOperands(specialCommand, ptr, commandIndex, operands, &hSuspectLabel, &hRow, lineNum);
@@ -506,10 +506,8 @@ int analyzeOperands(bool special, char *ptr, int commandIndex, int *operandType,
 	}
 	while ((token != NULL) && ((endOfLine(token) != EOL)))
 	{
-
 		isImidiate = immidiateCheck(token, rowToBinary, opNum, lineNum);
-
-		if (isImidiate == true)
+		if (isImidiate > 0)
 		{
 			if (firstOp)
 			{
@@ -620,19 +618,19 @@ int analyzeOperands(bool special, char *ptr, int commandIndex, int *operandType,
 
 int immidiateCheck(char *word, gNode row, int opNum, int lineNum)
 {
-	if (*word == '#') /* check if is digit only ! with - or not */
+	int i = 0;
+	int digit = 1;
+	if (*word == '-' || *word == '+')
+		word += 1;
+
+	while (i <= strlen(word))
 	{
-		if (numCheck((word + 1), row, opNum) >= 0)
-			return true;
-		else
+		if (endOfLine(word + i) == EOL || *(word + i) == ' ' || *(word + i) == '\t' || *(word + i) == ',')
 		{
-			return -1;
+			return digit;
 		}
-	}
-	else if ((isdigit(*word)) && (getOpType(row, opNum) == IMMEDIATE))
-	{
-		printf("ERROR: Invalid declare of number - supose to be '#' before number %s in line %d\n", word, lineNum);
-		return -1;
+		digit = digit * isdigit(*(word + i));
+		i++;
 	}
 	return false;
 }
@@ -645,13 +643,14 @@ bool isRegister(char *name, gNode row, int index)
 	{
 		if ((endOfLine((name + 3)) != EOL) && (*(name + 3) != ' ') && (*(name + 3) != '\t'))
 		{
-			false;
+			return false;
 		}
 	}
 	strncpy(reg, name, 3);
+
 	while (i < REGISTER_NUM)
 	{
-		if (strcmp(reg, getRegisterName(i)) == 0)
+		if (strncmp(reg, getRegisterName(i), 3) == 0)
 		{
 			setOp(row, index + 1, i);
 			return true;
