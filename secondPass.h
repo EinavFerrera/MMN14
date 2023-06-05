@@ -49,4 +49,5 @@ void updateEntExtInSymbols(gNode *hEntExt, gNode *hSymbol);
  * */
 void printLabels(gNode HEAD);
 void buildFromBinary(FILE *obFile, int IC);
+void cmpListCpyDeleteSameName(gNode *src, gNode *willBeDeleted, gNode *willBeExtended);
 #endif

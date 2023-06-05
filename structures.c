@@ -112,6 +112,16 @@ void cmpListDeleteSameName(gNode *src, gNode *willBeDeleted)
 		cmpListDeleteSameName(src, willBeDeleted);
 	}
 }
+void cmpListCpyDeleteSameName(gNode *src, gNode *willBeDeleted, gNode *willBeExtended)
+{
+	gNode temp = cmpListsName(src, *willBeDeleted);
+	if (temp != NULL)
+	{
+		deleteNode(willBeDeleted, temp);
+		insert(willBeExtended, temp);
+		cmpListCpyDeleteSameName(src, willBeDeleted, willBeExtended);
+	}
+}
 
 void deleteHead(gNode *HEAD)
 {

@@ -18,8 +18,11 @@ void secPass(char *fileName, gNode *hRow, gNode *hSuspectLabel, gNode *hSymbol, 
 	/***************************************************************************/
 
 	/***checks if there is undeclared labels but written inside instrucions***/
+
 	cmpListDeleteSameName(hSymbol, hSuspectLabel);
-	cmpListDeleteSameName(hEntryExtern, hSuspectLabel);
+
+	cmpListCpyDeleteSameName(hEntryExtern, hSuspectLabel, hSymbol);
+
 	if (getName(hSuspectLabel) != NULL)
 	{
 		printf("ERROR: Invalid labels was founded - the next labels are not declare properly\n");
@@ -43,6 +46,7 @@ void secPass(char *fileName, gNode *hRow, gNode *hSuspectLabel, gNode *hSymbol, 
 		count = 0;
 		sprintf(filePath, "%s.ent", fileName);
 		entFile = fopen(filePath, "w");
+
 		count = createEntFile(*hEntryExtern, *hSymbol, entFile);
 
 		fclose(entFile);
@@ -50,6 +54,7 @@ void secPass(char *fileName, gNode *hRow, gNode *hSuspectLabel, gNode *hSymbol, 
 	/***************************************************************************/
 
 	/**************************create an ext file*******************************/
+
 	temp = *hEntryExtern;
 	while (temp != NULL)
 	{
@@ -78,7 +83,7 @@ void secPass(char *fileName, gNode *hRow, gNode *hSuspectLabel, gNode *hSymbol, 
 	/**************************create an ob file********************************/
 	sprintf(filePath, "%s.ob", fileName);
 	binaryFile = fopen(filePath, "w");
-	fprintf(binaryFile, "%d%d", IC, DC);
+	fprintf(binaryFile, "%d\t%d\n", IC, DC);
 
 	binaryCode(binaryFile, *hRow, *hSymbol, IC);
 	// printf("this !?:_%d_\n", count);
@@ -97,32 +102,34 @@ int createEntFile(gNode hEntryExtern, gNode hSymbols, FILE *entFile)
 		printf("\tent file was created successfully\n");
 		return 0;
 	}
-	createEntFile(getNext(hEntryExtern), hSymbols, entFile);
 	if (getType(hEntryExtern) == ENTRY)
 	{
 		if (search(&hSymbols, getName(hEntryExtern)) != NULL)
 		{
-			fprintf(entFile, "%s\t0%d\n", getName(hEntryExtern), 100 + getAddress(search(&hSymbols, getName(hEntryExtern))));
+			fprintf(entFile, "%s\t%d\n", getName(hEntryExtern), 100 + getAddress(search(&hSymbols, getName(hEntryExtern))));
 		}
 	}
+	createEntFile(getNext(hEntryExtern), hSymbols, entFile);
 	return 0;
 }
 
 int createExtFile(gNode hEntryExtern, gNode hSymbols, FILE *extFile)
 {
-	if (hEntryExtern == NULL)
+	gNode tmp;
+	if (hSymbols == NULL)
 	{
 		printf("\text file was created successfully\n");
 		return 0;
 	}
-	createExtFile(getNext(hEntryExtern), hSymbols, extFile);
-	if (getType(hEntryExtern) == EXT)
+	tmp = search(&hEntryExtern, getName(hSymbols));
+	if (tmp != NULL)
 	{
-		if (search(&hSymbols, getName(hEntryExtern)) != NULL)
+		if (getType(tmp) == EXT)
 		{
-			fprintf(extFile, "%s\t0%d\n", getName(hEntryExtern), 100 + getAddress(search(&hSymbols, getName(hEntryExtern))));
+			fprintf(extFile, "%s\t%d\n", getName(tmp), 100 + getAddress(hSymbols));
 		}
 	}
+	createExtFile(hEntryExtern, getNext(hSymbols), extFile);
 	return 0;
 }
 
@@ -152,7 +159,8 @@ void printLabels(gNode HEAD)
 	while ((tmp != NULL) && (getName(tmp) != NULL))
 	{
 		printf("\n");
-		printf("-> %s", getName(tmp));
+		printf("%s\t", getName(tmp));
+		printf("adress: %d\t", getAddress(tmp));
 		printf("\tLine Num: %d\n", getLineNum(tmp));
 
 		tmp = getNext(tmp);

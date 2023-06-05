@@ -90,7 +90,7 @@ void fPass(char *fileName)
 			else
 				error = true;
 		}
-		else if (isEntryExtern(word) == EXT)
+		else if ((isEntryExtern(word) == EXT))
 		{
 			nextExpression(&ptr, &count, &wordLength, &word);
 			temp = createNode(word, 0);
@@ -162,7 +162,7 @@ void fPass(char *fileName)
 		}
 		else if (commandIndex >= 0)
 		{
-			L = analyzeOperands(specialCommand, ptr, commandIndex, operands, &hSuspectLabel, &hRow, lineNum);
+			L = analyzeOperands(specialCommand, ptr, commandIndex, operands, &hSuspectLabel, &hRow, lineNum, IC);
 
 			if (L < 0)
 			{
@@ -195,6 +195,7 @@ void fPass(char *fileName)
 	{
 		addICtoDataAddress(&hSymbol, IC);
 		addICtoDataAddress(&hRow, IC);
+
 		secPass(fileName, &hRow, &hSuspectLabel, &hSymbol, &hEntryExtern, IC, DC);
 	}
 	else
@@ -311,9 +312,13 @@ bool isEntryExtern(char *ptr)
 	char entry[] = ".entry";
 	char ext[] = ".extern";
 	if (strncmp(ptr, entry, strlen(entry)) == 0)
+	{
 		return ENTRY;
+	}
 	else if (strncmp(ptr, ext, strlen(ext)) == 0)
+	{
 		return EXT;
+	}
 	else
 		return NOT_ENT_EXT;
 }
@@ -470,7 +475,7 @@ int analyzeString(char *ptr, gNode *hRow, int lineNum)
 	return count + 1; /* +1 for '\0' */
 }
 
-int analyzeOperands(bool special, char *ptr, int commandIndex, int *operandType, gNode *hSuspectLabel, gNode *hRow, int lineNum)
+int analyzeOperands(bool special, char *ptr, int commandIndex, int *operandType, gNode *hSuspectLabel, gNode *hRow, int lineNum, int IC)
 {
 	bool firstOp = true;
 	bool secOp = false;
@@ -545,6 +550,7 @@ int analyzeOperands(bool special, char *ptr, int commandIndex, int *operandType,
 			}
 			temp = createNode(token, 0);
 			setLineNum(temp, lineNum);
+			setAddress(temp, IC + 1 + opNum);
 			insert(hSuspectLabel, temp);
 			opNum += 1;
 		}

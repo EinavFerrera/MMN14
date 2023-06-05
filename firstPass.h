@@ -146,7 +146,7 @@ int analyzeString(char *ptr, gNode *hRow, int lineNum);
  * @param lineNum - line number in am file (for errors)
  * @return number of operands including the command itself
  * */
-int analyzeOperands(bool special, char *ptr, int commandIndex, int *operandType, gNode *hSuspectLabel, gNode *hRow, int lineNum);
+int analyzeOperands(bool special, char *ptr, int commandIndex, int *operandType, gNode *hSuspectLabel, gNode *hRow, int lineNum, int IC);
 
 /** immidiateCheck
  * checks if the operand has immidiate address
@@ -154,6 +154,7 @@ int analyzeOperands(bool special, char *ptr, int commandIndex, int *operandType,
  * @param row - A pointer to the node of the row to update the analyzed row
  * @param opNum - the index of operand
  * @param lineNum - line number in am file (for errors)
+ * @param IC - the current IC adress for suspcet labels
  * @return number of operands including the command itself
  * */
 int immidiateCheck(char *word, gNode row, int opNum, int lineNum);
