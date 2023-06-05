@@ -1,11 +1,8 @@
-; file ps.as
 .extern L3
 .extern W
 .entry LENGTH
-MAIN:   mov @r3 ,LENGTH
-LOOP: 	        jmp      L1
-
-;this is comment
+MAIN: mov @r3 ,LENGTH
+LOOP: jmp L1
 prn -5
 bne W
 sub @r1, @r4
