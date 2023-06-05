@@ -20,7 +20,6 @@ void secPass(char *fileName, gNode *hRow, gNode *hSuspectLabel, gNode *hSymbol, 
 	/***checks if there is undeclared labels but written inside instrucions***/
 	cmpListDeleteSameName(hSymbol, hSuspectLabel);
 	cmpListDeleteSameName(hEntryExtern, hSuspectLabel);
-
 	if (getName(hSuspectLabel) != NULL)
 	{
 		printf("ERROR: Invalid labels was founded - the next labels are not declare properly\n");
@@ -52,7 +51,6 @@ void secPass(char *fileName, gNode *hRow, gNode *hSuspectLabel, gNode *hSymbol, 
 
 	/**************************create an ext file*******************************/
 	temp = *hEntryExtern;
-	printf("yes?\n");
 	while (temp != NULL)
 	{
 
@@ -74,7 +72,6 @@ void secPass(char *fileName, gNode *hRow, gNode *hSuspectLabel, gNode *hSymbol, 
 		count = createExtFile(*hEntryExtern, *hSymbol, extFile);
 		fclose(extFile);
 	}
-	printf("this !?:_%d_\n", count);
 
 	/***************************************************************************/
 
@@ -84,7 +81,9 @@ void secPass(char *fileName, gNode *hRow, gNode *hSuspectLabel, gNode *hSymbol, 
 	fprintf(binaryFile, "%d%d", IC, DC);
 
 	binaryCode(binaryFile, *hRow, *hSymbol, IC);
+	// printf("this !?:_%d_\n", count);
 	fclose(binaryFile);
+
 	/***************************************************************************/
 
 	printf("\nThe Second pass phase has been completed successfully for file: %s\n\nAll the process has been finished without errors!!!", filePath);

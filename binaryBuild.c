@@ -10,9 +10,9 @@
 
 void binaryCode(FILE *obFile, gNode rowData, gNode labels, int IC)
 {
+
     writeCODE(obFile, rowData, labels);
     DATAparts(obFile, rowData);
-    buildFromBinary(obFile, IC);
     printf("\tob file was created successfully\n");
 }
 
@@ -282,7 +282,7 @@ void writeBinary(int num, int address, FILE *obFile)
     int i = 0;
     int numToCompare = pow(2, 13);
 
-    while (i < 14)
+    while (i < 14) // maybe to 12?
     {
         if (num & numToCompare)
             fputs("1", obFile);

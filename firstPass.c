@@ -18,7 +18,7 @@ void fPass(char *fileName)
 	char line[LINE_LEN];			  /*array of chars - getting whole line content*/
 	char *ptr;						  /*pointer of row chars*/
 	char *word;						  /*pointer word - will be declared forward*/
-
+	FILE *binaryFile;
 	int wordLength;					/*measuring the length of word*/
 	int lineNum = 0;				/*absolute line number in the am file*/
 	int IC = 0;						/*instruction counter*/
@@ -57,7 +57,7 @@ void fPass(char *fileName)
 		specialCommand = false;
 		ptr = line;
 		/***************************/
-
+		printf("\nTHIS IS FIRST LINE IN FILE:_%s_\n", line);
 		validRowInput = validRow(line, lineNum);
 		if (validRowInput == 0)
 			continue;
@@ -215,6 +215,10 @@ void fPass(char *fileName)
 	}
 
 	fclose(modifiedFile);
+	sprintf(filePath, "%s.ot", fileName);
+	binaryFile = fopen(filePath, "w");
+	buildFromBinary(binaryFile, IC);
+	fclose(binaryFile);
 }
 
 void emptyIntArray(int array[], int n) /* set array to empty */

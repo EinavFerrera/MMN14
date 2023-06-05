@@ -102,6 +102,7 @@ void compileFile(char *fileName)
 	{
 		printf("Pre assembler phase has been completed - am file was created successfully\n");
 		fPass(fileName);
+		return;
 	}
 	else
 	{
