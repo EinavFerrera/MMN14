@@ -57,7 +57,6 @@ void fPass(char *fileName)
 		specialCommand = false;
 		ptr = line;
 		/***************************/
-		printf("\nTHIS IS FIRST LINE IN FILE:_%s_\n", line);
 		validRowInput = validRow(line, lineNum);
 		if (validRowInput == 0)
 			continue;
@@ -104,11 +103,9 @@ void fPass(char *fileName)
 			else
 				error = true;
 		}
-
 		commandIndex = isCommand(word);
-
 		/*data / string / command / entry / extern*/
-		if (isData(word)) /* !! we need to change the 14 bits to 12*/
+		if (isData(word))
 		{
 
 			L = analyzeData(ptr, &hRow, lineNum);
@@ -165,11 +162,6 @@ void fPass(char *fileName)
 		}
 		else if (commandIndex >= 0)
 		{
-			/*if ((commandIndex == 9) || (commandIndex == 10) || (commandIndex == 13))*/
-			{
-				/*specialCommand = true; to be notice later !! */
-			}
-
 			L = analyzeOperands(specialCommand, ptr, commandIndex, operands, &hSuspectLabel, &hRow, lineNum);
 
 			if (L < 0)
@@ -187,7 +179,6 @@ void fPass(char *fileName)
 			IC = IC + L;
 			continue;
 		}
-
 		else if (((!label) && (count == 1)) || ((label) && (count == 2))) /*definitely not a command now*/
 		{
 			printf("ERROR: Invalid instruction - supose to be command \\ .string \\ .data in line %d\n", lineNum);
@@ -215,10 +206,10 @@ void fPass(char *fileName)
 	}
 
 	fclose(modifiedFile);
-	sprintf(filePath, "%s.ot", fileName);
+	/*sprintf(filePath, "%s.ot", fileName);
 	binaryFile = fopen(filePath, "w");
 	buildFromBinary(binaryFile, IC);
-	fclose(binaryFile);
+	fclose(binaryFile);*/
 }
 
 void emptyIntArray(int array[], int n) /* set array to empty */
@@ -485,29 +476,23 @@ int analyzeOperands(bool special, char *ptr, int commandIndex, int *operandType,
 	bool secOp = false;
 	bool reg = false;
 
-	gNode rowToBinary = NULL; /* !! intersting*/
+	gNode rowToBinary = NULL;
 	gNode temp = NULL;
 
 	int isImidiate;
 	int opNum = 0;
+	int i;
 
 	char *token = NULL;
 	char delims[] = ", \r\n\t";
-	char delims2[] = " (,) \r\n\t";
 	char expression[strlen(ptr)];
 
 	strcpy(expression, ptr);
-	rowToBinary = createNode(expression, 0); /* !! we need to change the 14 bits to 12*/
+	rowToBinary = createNode(expression, 0);
 	setLineNum(rowToBinary, lineNum);
 
-	if (!special) /* !! we dont have special*/
-	{
-		token = strtok(ptr, delims);
-	}
-	else
-	{
-		token = strtok(ptr, delims2);
-	}
+	token = strtok(ptr, delims);
+
 	while ((token != NULL) && ((endOfLine(token) != EOL)))
 	{
 		isImidiate = immidiateCheck(token, rowToBinary, opNum, lineNum);
@@ -583,20 +568,15 @@ int analyzeOperands(bool special, char *ptr, int commandIndex, int *operandType,
 			setOpType(rowToBinary, 3, operandType[2]);
 			setType(rowToBinary, JUMP);
 		}
-		if (!special)
-		{
-			token = strtok(NULL, delims);
-		}
-		else
-		{
-			token = strtok(NULL, delims2);
-		}
+
+		token = strtok(NULL, delims);
 	}
+
 	setCommand(rowToBinary, commandIndex);
 	setNumOfOps(rowToBinary, opNum);
 	insert(hRow, rowToBinary);
 
-	if ((operandType[0] == NO_ADDRESS) && (commandIndex < 14))
+	if ((operandType[0] == NO_ADDRESS) && (commandIndex < 14)) /*checks if there is no operand. only 14/15 fir op is NON*/
 	{
 		printf("ERROR: invalid instrucion - first operand is not valid in line %d\n", lineNum);
 		return -1;
@@ -608,15 +588,10 @@ int analyzeOperands(bool special, char *ptr, int commandIndex, int *operandType,
 		return -1;
 	}
 
-	if (((operandType[0] == DIRECT_REG) && (operandType[1] == DIRECT_REG)) && (!special))
+	if (((operandType[0] == DIRECT_REG) && (operandType[1] == DIRECT_REG)))
 	{
 		opNum -= 1;
-	} /*two registers in on opcode*/
-	if (((operandType[1] == DIRECT_REG) && (operandType[2] == DIRECT_REG)) && (special))
-	{
-		opNum -= 1;
-	} /*two registers in on opcode*/
-
+	}				  /*two registers in on opcode*/
 	return opNum + 1; /* +1 for command */
 }
 
@@ -730,26 +705,13 @@ bool opernadsTypeCheck(gNode row)
 
 bool checkValidInstrucion(char *ptr, int opNum, int commandIndex, int *operandType, int lineNum)
 {
-	int bracketOp = 0;
-	int bracketCl = 0;
+
 	int comma = 0;
 	int i = 0;
 	bool special = false;
 	ignoreSpaceTab(&ptr);
-	if ((commandIndex == 9) || (commandIndex == 10) || (commandIndex == 13))
-	{
-		special = true;
-	}
 
-	if (special)
-	{
-		if ((opNum != 1) && (opNum != 3))
-		{
-			printf("ERROR: Invalid instruction - no match between command and num of operands in line %d\n", lineNum);
-			return false;
-		}
-	}
-	else if (getOpNum(commandIndex) != opNum)
+	if (getOpNum(commandIndex) != opNum)
 	{
 		printf("ERROR: Invalid instruction - no match between command and num of operands in line %d\n", lineNum);
 		return false;
@@ -759,51 +721,14 @@ bool checkValidInstrucion(char *ptr, int opNum, int commandIndex, int *operandTy
 	{
 		if (*(ptr + i) == ',')
 			comma++;
-		if (*(ptr + i) == '(')
-			bracketOp++;
-		if (*(ptr + i) == ')')
-			bracketCl++;
-
-		if ((special) && ((*(ptr + i) == ' ') || (*(ptr + i) == '\t')) && (bracketCl == 0))
-		{
-			printf("ERROR: Invalid instruction - in jmp/bne/jsr commands, spaces or tabs are prohibited: '%s' in line %d\n", ptr, lineNum);
-			return NOT_VALID_INSTRUCTION;
-		}
 		i++;
 	}
 
-	if (special)
+	if (((comma >= opNum) && (commandIndex < 14)) || ((comma >= (opNum + 1)) && (commandIndex > 13)))
 	{
-		if (bracketOp > bracketCl)
-		{
-			printf("ERROR: Invalid instruction - missing close bracket: in line %d\n", lineNum);
-			return NOT_VALID_INSTRUCTION;
-		}
-		if (bracketOp < bracketCl)
-		{
-			printf("ERROR: Invalid instruction - missing open bracket in line %d\n", lineNum);
-			return NOT_VALID_INSTRUCTION;
-		}
-		if (((comma >= (opNum - 1)) && (opNum == 3)) || ((comma >= opNum) && (opNum == 1)))
-		{
-			printf("ERROR: Invalid instruction - Too many commas in line %d\n", lineNum);
-			return NOT_VALID_INSTRUCTION;
-		}
+		printf("ERROR: Invalid instruction - Too many commas in line %d\n", lineNum);
+		return NOT_VALID_INSTRUCTION;
 	}
-	else
-	{
-		if (((comma >= opNum) && (commandIndex < 14)) || ((comma >= (opNum + 1)) && (commandIndex > 13)))
-		{
-			printf("ERROR: Invalid instruction - Too many commas in line %d\n", lineNum);
-			return NOT_VALID_INSTRUCTION;
-		}
-		if (bracketCl != bracketOp)
-		{
-			printf("ERROR: Invalid instruction - not supose to be bracket in line %d\n", lineNum);
-			return NOT_VALID_INSTRUCTION;
-		}
-	}
-
 	return true;
 }
 
