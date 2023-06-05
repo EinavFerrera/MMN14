@@ -1,3 +1,5 @@
+.DEFAULT_GOAL := all
+
 assembler: main.o preAssembler.o structures.o firstPass.o registerTable.o binaryBuild.o secPass.o binaryTo64.o
 	gcc *.c -Wall -ansi -pedantic -o assembler -lm
 main.o: main.c preAssembler.h
@@ -16,3 +18,9 @@ binaryBuild.o: binaryBuild.c binaryBuild.h structures.h firstPass.h
 	gcc binaryBuild.c -Wall -ansi -pedantic -c
 binaryTo64.o: binaryTo64.c binaryBuild.h structures.h firstPass.h
 	gcc binaryTo64.c -Wall -ansi -pedantic -c
+
+clean:
+	rm -f *.o
+
+.PHONY: all
+all: assembler clean
