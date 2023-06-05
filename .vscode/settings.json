@@ -1,9 +1,0 @@
-{
-    "files.associations": {
-        "binarybuild.h": "c",
-        "secondpass.h": "c",
-        "ctype.h": "c",
-        "chrono": "c",
-        "variant": "c"
-    }
-}
