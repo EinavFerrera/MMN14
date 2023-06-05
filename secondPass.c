@@ -84,9 +84,7 @@ void secPass(char *fileName, gNode *hRow, gNode *hSuspectLabel, gNode *hSymbol, 
 	sprintf(filePath, "%s.ob", fileName);
 	binaryFile = fopen(filePath, "w");
 	fprintf(binaryFile, "%d\t%d\n", IC, DC);
-
 	binaryCode(binaryFile, *hRow, *hSymbol, IC);
-	// printf("this !?:_%d_\n", count);
 	fclose(binaryFile);
 
 	/***************************************************************************/
