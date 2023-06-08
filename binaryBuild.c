@@ -46,9 +46,9 @@ void writeCODE(FILE *obFile, gNode rowData, gNode labels)
         opType3 = getOpType(rowData, 3);
 
         if (opType1 == DIRECT_REG)
-            opType1 = 3;
+            opType1 = 3; /*5*/
         else if ((opType1 == IMMEDIATE) || (opType1 == NO_ADDRESS))
-            opType1 = 0;
+            opType1 = 0; /*1*/
 
         if (opType2 == DIRECT_REG)
             opType2 = 3;
@@ -67,7 +67,7 @@ void writeCODE(FILE *obFile, gNode rowData, gNode labels)
             opSrc = 0;
             opDest = 2;
         }
-        else
+        011 else
         {
             if ((getNumOfOps(rowData) == 1) && ((opType1 & opType2 & 3) == 0))
             {
@@ -280,7 +280,7 @@ void writeString(FILE *obFile, gNode rowData)
 void writeBinary(int num, int address, FILE *obFile)
 {
     int i = 0;
-    int numToCompare = pow(2, 13);
+    int numToCompare = pow(2, 13); /*12*/
 
     while (i < 14) // maybe to 12?
     {

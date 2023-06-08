@@ -13,7 +13,7 @@ void fPass(char *fileName)
 
 	/*******************************declaration for the proccess*************************************/
 	FILE *modifiedFile; /*am file - with extracted macro*/
-
+	FILE *baseFile, *binary;
 	char filePath[MAXIMUM_FILE_NAME]; /*contains the file path - recived from the terminal*/
 	char line[LINE_LEN];			  /*array of chars - getting whole line content*/
 	char *ptr;						  /*pointer of row chars*/
@@ -207,10 +207,13 @@ void fPass(char *fileName)
 	}
 
 	fclose(modifiedFile);
-	/*sprintf(filePath, "%s.ot", fileName);
-	binaryFile = fopen(filePath, "w");
-	buildFromBinary(binaryFile, IC);
-	fclose(binaryFile);*/
+	sprintf(filePath, "%s.ob", fileName);
+	binary = fopen(filePath, "r");
+	sprintf(filePath, "%s.ot", fileName);
+	baseFile = fopen(filePath, "w");
+	buildFromBinary(binary, baseFile, IC);
+	fclose(baseFile);
+	fclose(binary);
 }
 
 void emptyIntArray(int array[], int n) /* set array to empty */

@@ -114,5 +114,6 @@ bool isMcrValid(char *mcrName); /*checks if the macro name is the name of instru
 void freeList(gNode HEAD);
 char digitToBase64(char *);
 char *srcDestConvert(char *);
+void convertTempToSrcDest(const char *temp, char *returnString);
 
 #endif

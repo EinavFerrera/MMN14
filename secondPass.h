@@ -48,6 +48,6 @@ void updateEntExtInSymbols(gNode *hEntExt, gNode *hSymbol);
  * @param HEAD - head of the certain list (suspect label list)
  * */
 void printLabels(gNode HEAD);
-void buildFromBinary(FILE *obFile, int IC);
+void buildFromBinary(FILE *obFile, FILE *otFile, int IC);
 void cmpListCpyDeleteSameName(gNode *src, gNode *willBeDeleted, gNode *willBeExtended);
 #endif

@@ -27,9 +27,10 @@ enum
 /** buildFromBinary
  * converts the binary code to base 64
  * @param obFile - the binary file
+ * @param otFile - dest file to write in base 64 encoding
  * @param IC - the number of lines in IC part
  * */
-void buildFromBinary(FILE *obFile, int IC);
+void buildFromBinary(FILE *obFile, FILE *otFile, int IC);
 
 /** fPass
  * first pass
