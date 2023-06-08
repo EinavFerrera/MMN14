@@ -57,7 +57,7 @@ void writeString(FILE *obFile, gNode rowData);
  * @param address - the prepared address for 14 bytes to write into the file
  * @param obFile - the path of opened .ob file
  * */
-void writeBinary(int num, int address, FILE *obFile);
+void writeBinary(int num, FILE *obFile);
 
 /** getAddressOfLabel
  * getting the address of certain label and operand - looking for the node in rows and taking the address from labels
@@ -73,7 +73,7 @@ int getAddressOfLabel(gNode row, gNode labels, int index);
  * @param row - the list of rows
  * @param labels - the list of labels
  * @param index - the number of certain operand
- * @return A/R/E - 0/1/2 - (binry - 00/10/01)
+ * @return A/R/E - 0/1/2 - (binry -> 00- reg /10-local label /01 - extern label)
  * */
 int getAREOfLabel(gNode row, gNode labels, int index);
 

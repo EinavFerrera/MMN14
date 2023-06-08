@@ -7,6 +7,21 @@
 #include "binaryBuild.h"
 #include "firstPass.h"
 #include "registerTable.h"
+char digitToBase64(char *digit)
+{
+    int number;
+    number = (int)strtol(digit, NULL, 2);
+    if (number >= 0 && number <= 25) /* number between A(0 - 65) and Z(25 - 90)*/
+        return number + 65;
+    if (number >= 26 && number <= 51) /* number between a(26 - 97) and z(51 - 122)*/
+        return number + 71;
+    if (number >= 52 && number <= 61) /* number between 0(52 - 48) and 9(61 - 57)*/
+        return number - 4;
+    if (number == 62) /* return + */
+        return 43;
+    if (number == 63) /* return / */
+        return 47;
+}
 
 void binaryCode(FILE *obFile, gNode rowData, gNode labels, int IC)
 {
@@ -26,11 +41,7 @@ void writeCODE(FILE *obFile, gNode rowData, gNode labels)
      * @param param2 define the second param type (bytes 10-11)
      * @param param1 define the first param type (bytes 12-13)
      * */
-
-    int address;
-    int param1 = 0;
-    int param2 = 0;
-    int opCode, opSrc, opDest, opType1, opType2, opType3, op1, op2, op3, final;
+    int opCode, opSrc, opDest, opType1, opType2, op1, op2, final;
 
     if (rowData == NULL)
     {
@@ -40,119 +51,119 @@ void writeCODE(FILE *obFile, gNode rowData, gNode labels)
 
     if (getType(rowData) != DATA)
     {
-        address = getAddress(rowData);
         opType1 = getOpType(rowData, 1);
         opType2 = getOpType(rowData, 2);
-        opType3 = getOpType(rowData, 3);
 
         if (opType1 == DIRECT_REG)
-            opType1 = 3; /*5*/
-        else if ((opType1 == IMMEDIATE) || (opType1 == NO_ADDRESS))
-            opType1 = 0; /*1*/
+            opType1 = 5; /*101*/
+        else if (opType1 == DIRECT)
+            opType1 = 3; /*011*/
+        else if (opType1 == IMMEDIATE)
+            opType1 = 1; /*001*/
+        else if (opType1 == NO_ADDRESS)
+            opType1 = 0; /*000*/
 
         if (opType2 == DIRECT_REG)
+            opType2 = 5;
+        else if (opType2 == DIRECT)
             opType2 = 3;
-        else if ((opType2 == IMMEDIATE) || (opType2 == NO_ADDRESS))
+        else if ((opType2 == IMMEDIATE))
+            opType2 = 1;
+        else if (opType2 == NO_ADDRESS)
             opType2 = 0;
 
-        if (opType3 == DIRECT_REG)
-            opType3 = 3;
-        else if ((opType3 == IMMEDIATE) || (opType3 == NO_ADDRESS))
-            opType3 = 0;
-
-        if (getType(rowData) == JUMP)
+        // if (getType(rowData) == JUMP)
+        // {
+        //     opSrc = 0;
+        //     opDest = 2;
+        // }
+        // else
+        if (getNumOfOps(rowData) == 1)
         {
-            param1 = opType2;
-            param2 = opType3;
             opSrc = 0;
-            opDest = 2;
+            opDest = opType1;
         }
-        011 else
+        else
         {
-            if ((getNumOfOps(rowData) == 1) && ((opType1 & opType2 & 3) == 0))
-            {
-                opSrc = 0;
-                opDest = opType1;
-            }
-            else
-            {
-                opSrc = opType1;
-                opDest = opType2;
-            }
+            opSrc = opType1;
+            opDest = opType2;
         }
 
         opCode = getCommand(rowData);
         /*********************************************************************************************/
+        /*
+        index:
+        0   1  2  3  4  5  6  7  8  9  10  11
+        11 10  9  8  7  6  5  4  3  2  1   0
+        [src   ]  [opcode  ]  [dest ]  [ARE]
+        */
 
+        /*
+        index:
+         0   1   2   3  4  5  6  7  8  9  10  11 12  13
+        13  12  11  10  9  8  7  6  5  4  3   2  1   0
+        [pa1  ] [par2] [opcode   ] [src] [dest]  [ARE]
+        */
         opDest = opDest << 2;
-        opSrc = opSrc << 4;
-        opCode = opCode << 6;
-        param2 = param2 << 10;
-        param1 = param1 << 12;
-        final = param1 + param2 + opCode + opSrc + opDest;
-
-        writeBinary(final, address, obFile);
+        opSrc = opSrc << 9;
+        opCode = opCode << 5;
+        final = opSrc + opCode + opDest;
+        writeBinary(final, obFile);
         writeBinaryParts(obFile, rowData, labels);
     }
 }
 
 void writeBinaryParts(FILE *obFile, gNode row, gNode labels)
 {
+
+    /*
+    DIRECT REG (5)
+    11 10 9 8 7 6 5 4 3 2  1  0
+    [src     ]  [dest   ] [ARE]
+
+    DIRECT(3)
+    11 10 9 8 7 6 5 4 3 2  1  0
+    [label adress       ] [ARE]
+
+    IMMIDIATE (1)
+    11 10 9 8 7 6 5 4 3 2  1  0
+    [immidiate         ] [ARE]
+    */
     int i = getNumOfOps(row);
     int count = 1;
+    int j;
     int rowAddress;
-    int op1, op2, op3, final, ARE;
+    int op1, op2, final, ARE;
     rowAddress = getAddress(row);
     if (getType(row) == JUMP)
     {
         ARE = getAREOfLabel(row, labels, 1);
-        op1 = getAddressOfLabel(row, labels, 1) << 2;
-        op1 = op1 + ARE;
-
-        if (getOpType(row, 2) == DIRECT)
+        if (getOpType(row, 1) == DIRECT) /*if label*/
         {
-            ARE = getAREOfLabel(row, labels, 2);
-            op2 = getAddressOfLabel(row, labels, 2) << 2;
-            op2 = op2 + ARE;
-        }
-        if (getOpType(row, 3) == DIRECT)
-        {
-            ARE = getAREOfLabel(row, labels, 3);
-            op3 = getAddressOfLabel(row, labels, 3) << 2;
-            op3 = op3 + ARE;
+            op1 = getAddressOfLabel(row, labels, 1) << 2;
+            op1 = op1 + ARE;
         }
 
-        if (getOpType(row, 2) == IMMEDIATE)
+        else if (getOpType(row, 1) == DIRECT_REG) /*if reg*/
         {
-            op2 = getOp(row, 2) << 2;
-        }
-        if (getOpType(row, 3) == IMMEDIATE)
-        {
-            op3 = getOp(row, 3) << 2;
-        }
-
-        if (getOpType(row, 2) == DIRECT_REG)
-        {
-            op2 = getOp(row, 2) << 8;
-        }
-        if (getOpType(row, 3) == DIRECT_REG)
-        {
-            op3 = getOp(row, 3) << 2;
-        }
-
-        if (getOpType(row, 2) == DIRECT_REG && getOpType(row, 3) == DIRECT_REG) /*registers are at source and destination*/
-        {
-            i--;
-            op2 = op2 + op3;
+            op1 = getOp(row, 1) << 2;
+            op1 = op1 + ARE;
         }
     }
     else
     {
+        // printf("%s_ type (direct=1, imm =2,direct reg =4):_%d_", getName(row), getOpType(row, 1));
+        //  scanf("%d", &j);
         if (getOpType(row, 1) == DIRECT)
         {
             ARE = getAREOfLabel(row, labels, 1);
-            op1 = getAddressOfLabel(row, labels, 1) << 2;
-            op1 = op1 + ARE;
+            if (ARE == 1)
+                op1 = 1;
+            else
+            {
+                op1 = getAddressOfLabel(row, labels, 1) << 2;
+                op1 = op1 + ARE;
+            }
         }
         if (getOpType(row, 2) == DIRECT)
         {
@@ -164,6 +175,8 @@ void writeBinaryParts(FILE *obFile, gNode row, gNode labels)
         if (getOpType(row, 1) == IMMEDIATE)
         {
             op1 = getOp(row, 1) << 2;
+            printf("\nthis is op1:_%d\n", op1);
+            scanf("%d", &j);
         }
         if (getOpType(row, 2) == IMMEDIATE)
         {
@@ -172,7 +185,7 @@ void writeBinaryParts(FILE *obFile, gNode row, gNode labels)
 
         if (getOpType(row, 1) == DIRECT_REG)
         {
-            op1 = getOp(row, 1) << 8;
+            op1 = getOp(row, 1) << 7;
         }
         if (getOpType(row, 2) == DIRECT_REG)
         {
@@ -189,15 +202,11 @@ void writeBinaryParts(FILE *obFile, gNode row, gNode labels)
     {
         if (count == 1)
         {
-            writeBinary(op1, (rowAddress + count), obFile);
+            writeBinary(op1, obFile);
         }
         else if (count == 2)
         {
-            writeBinary(op2, (rowAddress + count), obFile);
-        }
-        else if (count == 3)
-        {
-            writeBinary(op3, (rowAddress + count), obFile);
+            writeBinary(op2, obFile);
         }
         count++;
     }
@@ -243,14 +252,14 @@ void writeData(FILE *obFile, gNode rowData)
         if (*expression == ',')
         {
             num = atoi(originExp);
-            writeBinary(num, (address + count), obFile);
+            writeBinary(num, obFile);
             originExp = expression + 1;
             count++;
         }
         if (endOfLine(expression) == EOL)
         {
             num = atoi(originExp);
-            writeBinary(num, (address + count), obFile);
+            writeBinary(num, obFile);
             originExp = expression + 1;
             count++;
             break;
@@ -270,27 +279,45 @@ void writeString(FILE *obFile, gNode rowData)
     while (*expression != '"')
     {
         num = *expression;
-        writeBinary(num, (address + count), obFile);
+        writeBinary(num, obFile);
         expression += 1;
         count++;
     }
-    writeBinary(0, (address + count), obFile); /* writting '\0' at the end*/
+    writeBinary(0, obFile); /* writting '\0' at the end*/
 }
 
-void writeBinary(int num, int address, FILE *obFile)
+void writeBinary(int num, FILE *obFile)
 {
+    char base64[13] = "";
+    char Astr[7], Bstr[7];
+    char A, B;
     int i = 0;
-    int numToCompare = pow(2, 13); /*12*/
-
-    while (i < 14) // maybe to 12?
+    printf("\n");
+    int numToCompare = 2048; /*2^11*/
+    while (i < 12)
     {
         if (num & numToCompare)
-            fputs("1", obFile);
+        {
+            strcat(base64, "1");
+            printf("1");
+        }
         else
-            fputs("0", obFile);
+        {
+            strcat(base64, "0");
+            printf("0");
+        }
         i++;
         numToCompare = numToCompare >> 1;
     }
+    base64[12] = '\0';
+    strncpy(Astr, base64, 6);
+    Astr[6] = '\0';
+    strncpy(Bstr, base64 + 6, 6);
+    Bstr[6] = '\0';
+    A = digitToBase64(Astr); /* bits 11,10,9,8,7,6 ->base 64*/
+    B = digitToBase64(Bstr); /* bits  5,4,3,2,1,0 ->base 64*/
+    fputc(A, obFile);
+    fputc(B, obFile);
     fputs("\n", obFile);
 }
 
