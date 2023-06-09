@@ -207,13 +207,6 @@ void fPass(char *fileName)
 	}
 
 	fclose(modifiedFile);
-	sprintf(filePath, "%s.ob", fileName);
-	binary = fopen(filePath, "r");
-	sprintf(filePath, "%s.ot", fileName);
-	baseFile = fopen(filePath, "w");
-	buildFromBinary(binary, baseFile, IC);
-	fclose(baseFile);
-	fclose(binary);
 }
 
 void emptyIntArray(int array[], int n) /* set array to empty */
@@ -301,7 +294,6 @@ bool validLabel(gNode *list, char *ptr, int lineNum)
 		}
 		if (!isalpha(*(ptr + i)) && (!isdigit(*(ptr + i))) && ((endOfLine(ptr + i)) != EOL) && (*(ptr + i) != '@') && (*(ptr + i) != '-'))
 		{
-			printf("this is:%c\n", *(ptr + i));
 			printf("ERROR: The label '%s' contains not only numbers or letters in line %d\n", ptr, lineNum);
 			return false;
 		}

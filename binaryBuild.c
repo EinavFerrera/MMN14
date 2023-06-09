@@ -152,8 +152,6 @@ void writeBinaryParts(FILE *obFile, gNode row, gNode labels)
     }
     else
     {
-        // printf("%s_ type (direct=1, imm =2,direct reg =4):_%d_", getName(row), getOpType(row, 1));
-        //  scanf("%d", &j);
         if (getOpType(row, 1) == DIRECT)
         {
             ARE = getAREOfLabel(row, labels, 1);
@@ -174,13 +172,13 @@ void writeBinaryParts(FILE *obFile, gNode row, gNode labels)
 
         if (getOpType(row, 1) == IMMEDIATE)
         {
-            op1 = getOp(row, 1) << 2;
-            printf("\nthis is op1:_%d\n", op1);
-            scanf("%d", &j);
+            op1 = atoi(getLabel1(row));
+            op1 = op1 << 2;
         }
         if (getOpType(row, 2) == IMMEDIATE)
         {
-            op2 = getOp(row, 2) << 2;
+            op2 = atoi(getLabel2(row));
+            op2 = op2 << 2;
         }
 
         if (getOpType(row, 1) == DIRECT_REG)
@@ -292,19 +290,16 @@ void writeBinary(int num, FILE *obFile)
     char Astr[7], Bstr[7];
     char A, B;
     int i = 0;
-    printf("\n");
     int numToCompare = 2048; /*2^11*/
     while (i < 12)
     {
         if (num & numToCompare)
         {
             strcat(base64, "1");
-            printf("1");
         }
         else
         {
             strcat(base64, "0");
-            printf("0");
         }
         i++;
         numToCompare = numToCompare >> 1;
