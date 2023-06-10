@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := all
 
-assembler: main.o preAssembler.o structures.o firstPass.o registerTable.o binaryBuild.o secPass.o binaryTo64.o
+assembler: main.o preAssembler.o structures.o firstPass.o registerTable.o binaryBuild.o secPass.o
 	gcc *.c -Wall -ansi -pedantic -o assembler -lm
 main.o: main.c preAssembler.h
 	gcc main.c -Wall -ansi -pedantic -c
