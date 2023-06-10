@@ -208,7 +208,7 @@ char *getOpName(int index)
 {
 	if (index >= 0 && index < NUM_OF_OPCODE)
 		return opTable[index].name;
-	return -1;
+	return "FAIL";
 }
 int getOpNum(int index)
 {
