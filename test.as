@@ -1,25 +1,25 @@
-.entry LENGTH
-.extern W
-MAIN: mov @r3 ,LENGTH
-LOOP: jmp L1
+.entry LENGTH           
+.extern W    
+MAIN: mov @r3 ,LENGTH    
+LOOP: jmp L1    
 ;i am a note
-mcr einav
-    prn -5
+mcr einav    
+    prn -5 
     bne W
     ;i am a note
     sub @r1, @r4
 endmcr
 
 bne L3
-einav
+ einav  
 
 L1: inc K
 ;i am a note
 .entry LOOP
 jmp W
-;i am a note
+;i am a note    
 END: stop
-STR: .string "abcdef"
+STR: .string    "abcdef" 
 ;i am a note
 ;i am a note
 ;i am a note

@@ -219,6 +219,7 @@ int getOpDest(int index)
 	if ((index >= 0) && (index < NUM_OF_OPCODE))
 		return opTable[index].dest;
 }
+
 int getOpSrc(int index)
 {
 	if (index >= 0 && index < NUM_OF_OPCODE)

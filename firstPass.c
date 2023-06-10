@@ -201,7 +201,7 @@ void fPass(char *fileName)
 	else
 	{
 		printf("\n\n**********************************************************************************\n");
-		printf("\tThe process does not continue due to certain errors - see below\n");
+		printf("\tThe process does not continue due to certain errors - see above\n");
 		printf("**********************************************************************************\n");
 		return;
 	}
@@ -479,7 +479,7 @@ int analyzeOperands(bool special, char *ptr, int commandIndex, int *operandType,
 	gNode rowToBinary = NULL;
 	gNode temp = NULL;
 
-	int isImidiate;
+	int isImidiate = 0;
 	int opNum = 0;
 	int i;
 
@@ -584,9 +584,9 @@ int analyzeOperands(bool special, char *ptr, int commandIndex, int *operandType,
 	}
 	if (checkValidInstrucion(expression, opNum, commandIndex, operandType, lineNum) <= 0)
 		return -1;
-	else if (isImidiate < 0)
+	else if (isImidiate == -4)
 	{
-		printf("Invalid error. please call the manufacture!");
+		printf("FATAL error");
 		return -1;
 	}
 
@@ -613,7 +613,7 @@ int immidiateCheck(char *word, gNode row, int opNum, int lineNum)
 		digit = digit * isdigit(*(word + i));
 		i++;
 	}
-	return 0;
+	return -1;
 }
 
 bool isRegister(char *name, gNode row, int index)

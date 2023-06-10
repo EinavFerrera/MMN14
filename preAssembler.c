@@ -13,6 +13,7 @@ void compileFile(char *fileName)
 	char *ptr, *beginLine; /*ptr - pointer of line		/	beginLine - define the new begining of line without spaces or tabs*/
 	char line[LINE_LEN];   /*array of chars - getting whole line content*/
 	char *mcrName;		   /*macro name*/
+	char *ptrEnd;		   /*pointer to the end of the line*/
 
 	bool isName = false; /*flag for correct name of macro (exp. m1 as the name of macro alredy signed)*/
 	bool isMCR = false;	 /*flag for macro*/
@@ -21,6 +22,7 @@ void compileFile(char *fileName)
 	int mcr = NONE;	 /*note for macro - NONE / MCR / ENDMCR*/
 	int macroLines;	 /*counting the num of lines in each macro*/
 	int lineNum = 0; /*row number*/
+	int lineRealSize = 0;
 
 	gNode hMacro = NULL; /*head of macro list*/
 	gNode temp = NULL;	 /*getting the address of the willing node (exp. serach function etc.)*/
@@ -38,10 +40,23 @@ void compileFile(char *fileName)
 		/*initializing the variables of new line*/
 		lineNum += 1;
 		ptr = &line;
+		lineRealSize = 0;
 		/***************************************/
 		if ((*ptr == '\r') || (*ptr == '\n'))
 			continue;
-
+		while (*(ptr + lineRealSize) != '\n')
+		{
+			lineRealSize++;
+		}
+		if ((*(ptr + lineRealSize - 1) == ' ') || (*(ptr + lineRealSize - 1) == '\t'))
+		{
+			while ((*(ptr + lineRealSize - 1) == ' ') || (*(ptr + lineRealSize - 1) == '\t'))
+			{
+				*(ptr + lineRealSize - 1) = '\n';
+				*(ptr + lineRealSize) = '\0';
+				lineRealSize--;
+			}
+		}
 		ignoreSpaceTab(&ptr);
 		beginLine = ptr;
 
