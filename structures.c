@@ -208,22 +208,26 @@ char *getOpName(int index)
 {
 	if (index >= 0 && index < NUM_OF_OPCODE)
 		return opTable[index].name;
+	return -1;
 }
 int getOpNum(int index)
 {
 	if (index >= 0 && index < NUM_OF_OPCODE)
 		return opTable[index].operandNum;
+	return -1;
 }
 int getOpDest(int index)
 {
 	if ((index >= 0) && (index < NUM_OF_OPCODE))
 		return opTable[index].dest;
+	return -1;
 }
 
 int getOpSrc(int index)
 {
 	if (index >= 0 && index < NUM_OF_OPCODE)
 		return opTable[index].src;
+	return -1;
 }
 
 void freeList(gNode HEAD) /*will be used after symbol table and after macro table*/
