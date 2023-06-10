@@ -8,10 +8,10 @@ mcr einav
     bne W
     ;i am a note
     sub @r1, @r4
-end mcr
+endmcr
 
-einav
 bne L3
+einav
 
 L1: inc K
 ;i am a note

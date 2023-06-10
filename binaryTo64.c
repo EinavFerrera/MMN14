@@ -73,56 +73,22 @@ void buildFromBinary(FILE *obFile, FILE *otFile, int IC)
         counter++;
     }
 }
-char *srcDestConvert(char *temp)
-{
-    char *stringToReturn;
-    if (temp[0] == '0' && temp[1] == '0')
-    {
-        stringToReturn = "001";
-        return stringToReturn;
-    }
-    if (temp[0] == '0' && temp[1] == '1')
-    {
-        stringToReturn = "011";
-        return stringToReturn;
-    }
-    if (temp[0] == '1' && temp[1] == '1')
-    {
-        stringToReturn = "101";
-        return stringToReturn;
-    }
-}
-// char digitToBase64(char *digit)
-// {
-//     int number;
-//     number = (int)strtol(digit, NULL, 2);
-//     if (number >= 0 && number <= 25) /* number between A(0 - 65) and Z(25 - 90)*/
-//         return number + 65;
-//     if (number >= 26 && number <= 51) /* number between a(26 - 97) and z(51 - 122)*/
-//         return number + 71;
-//     if (number >= 52 && number <= 61) /* number between 0(52 - 48) and 9(61 - 57)*/
-//         return number - 4;
-//     if (number == 62) /* return + */
-//         return 43;
-//     if (number == 63) /* return / */
-//         return 47;
-// }
+
 void overWrite(FILE *obFile, char *place)
 {
-    FILE *file = fopen("test.ob", "w"); // Replace "example.txt" with your file path
+    FILE *file = fopen("test.ob", "w"); /* Replace "example.txt" with your file path*/
 
     if (file == NULL)
     {
         printf("Failed to open the file.\n");
         return;
     }
-    // Determine the file size
+    /* Determine the file size*/
     fseek(file, 0, SEEK_END);
     long size = ftell(file);
     rewind(file);
 
-    // Allocate memory to store the file contents
-    place = (char *)malloc(size + 1); // Add 1 for the null terminator
+    place = (char *)malloc(size + 1);
     if (place == NULL)
     {
         printf("Failed to allocate memory.\n");
@@ -130,9 +96,8 @@ void overWrite(FILE *obFile, char *place)
         return;
     }
 
-    // Read the file contents into the buffer
     fread(place, size, 1, file);
-    place[size] = '\0'; // Null-terminate the buffer
+    place[size] = '\0';
     printf("print place_%s_\n", place);
     return;
 }

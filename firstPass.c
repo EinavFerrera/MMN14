@@ -586,6 +586,7 @@ int analyzeOperands(bool special, char *ptr, int commandIndex, int *operandType,
 		return -1;
 	else if (isImidiate < 0)
 	{
+		printf("Invalid error. please call the manufacture!");
 		return -1;
 	}
 
@@ -612,7 +613,7 @@ int immidiateCheck(char *word, gNode row, int opNum, int lineNum)
 		digit = digit * isdigit(*(word + i));
 		i++;
 	}
-	return false;
+	return 0;
 }
 
 bool isRegister(char *name, gNode row, int index)
