@@ -72,12 +72,6 @@ void writeCODE(FILE *obFile, gNode rowData, gNode labels)
         else if (opType2 == NO_ADDRESS)
             opType2 = 0;
 
-        // if (getType(rowData) == JUMP)
-        // {
-        //     opSrc = 0;
-        //     opDest = 2;
-        // }
-        // else
         if (getNumOfOps(rowData) == 1)
         {
             opSrc = 0;
