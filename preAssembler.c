@@ -19,10 +19,10 @@ void compileFile(char *fileName)
 	bool isMCR = false;	 /*flag for macro*/
 	bool error = false;
 
-	int mcr = NONE;	 /*note for macro - NONE / MCR / ENDMCR*/
-	int macroLines;	 /*counting the num of lines in each macro*/
-	int lineNum = 0; /*row number*/
-	int lineRealSize = 0;
+	int mcr = NONE;		  /*note for macro - NONE / MCR / ENDMCR*/
+	int macroLines;		  /*counting the num of lines in each macro*/
+	int lineNum = 0;	  /*row number*/
+	int lineRealSize = 0; /*holds the distance from the ptr begining to the \n*/
 
 	gNode hMacro = NULL; /*head of macro list*/
 	gNode temp = NULL;	 /*getting the address of the willing node (exp. serach function etc.)*/
