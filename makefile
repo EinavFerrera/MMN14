@@ -16,8 +16,7 @@ registerTable.o: registerTable.c registerTable.h
 	gcc registerTable.c -Wall -ansi -pedantic -c
 binaryBuild.o: binaryBuild.c binaryBuild.h structures.h firstPass.h
 	gcc binaryBuild.c -Wall -ansi -pedantic -c
-binaryTo64.o: binaryTo64.c binaryBuild.h structures.h firstPass.h
-	gcc binaryTo64.c -Wall -ansi -pedantic -c
+
 
 clean:
 	rm -f *.o
