@@ -117,6 +117,7 @@ char *srcDestConvert(char *temp)
         return stringToReturn;
     }
 }
+<<<<<<< Updated upstream
 char digitToBase64(char *digit)
 {
     int number;
@@ -134,22 +135,25 @@ char digitToBase64(char *digit)
     if (number == 63) /* return / */
         return 47;
 }
+=======
+
+>>>>>>> Stashed changes
 void overWrite(FILE *obFile, char *place)
 {
-    FILE *file = fopen("test.ob", "w"); // Replace "example.txt" with your file path
+    FILE *file = fopen("test.ob", "w"); /* Replace "example.txt" with your file path*/
 
     if (file == NULL)
     {
         printf("Failed to open the file.\n");
         return;
     }
-    // Determine the file size
+    /* Determine the file size*/
     fseek(file, 0, SEEK_END);
     long size = ftell(file);
     rewind(file);
 
-    // Allocate memory to store the file contents
-    place = (char *)malloc(size + 1); // Add 1 for the null terminator
+    /*Allocate memory to store the file contents*/
+    place = (char *)malloc(size + 1); /* Add 1 for the null terminator*/
     if (place == NULL)
     {
         printf("Failed to allocate memory.\n");
@@ -157,9 +161,9 @@ void overWrite(FILE *obFile, char *place)
         return;
     }
 
-    // Read the file contents into the buffer
+    
     fread(place, size, 1, file);
-    place[size] = '\0'; // Null-terminate the buffer
+    place[size] = '\0'; 
     printf("print place_%s_\n", place);
     return;
 }

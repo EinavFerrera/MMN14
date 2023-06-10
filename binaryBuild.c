@@ -7,6 +7,25 @@
 #include "binaryBuild.h"
 #include "firstPass.h"
 #include "registerTable.h"
+<<<<<<< Updated upstream
+=======
+char digitToBase64(char *digit)
+{
+	printf("here3\n");
+    int number;
+    number = (int)strtol(digit, NULL, 2);
+    if (number >= 0 && number <= 25) /* number between A(0 - 65) and Z(25 - 90)*/
+        return number + 65;
+    if (number >= 26 && number <= 51) /* number between a(26 - 97) and z(51 - 122)*/
+        return number + 71;
+    if (number >= 52 && number <= 61) /* number between 0(52 - 48) and 9(61 - 57)*/
+        return number - 4;
+    if (number == 62) /* return + */
+        return 43;
+    if (number == 63) /* return / */
+        return 47;
+}
+>>>>>>> Stashed changes
 
 void binaryCode(FILE *obFile, gNode rowData, gNode labels, int IC)
 {
@@ -55,12 +74,16 @@ void writeCODE(FILE *obFile, gNode rowData, gNode labels)
         else if ((opType2 == IMMEDIATE) || (opType2 == NO_ADDRESS))
             opType2 = 0;
 
+<<<<<<< Updated upstream
         if (opType3 == DIRECT_REG)
             opType3 = 3;
         else if ((opType3 == IMMEDIATE) || (opType3 == NO_ADDRESS))
             opType3 = 0;
 
         if (getType(rowData) == JUMP)
+=======
+        if (getNumOfOps(rowData) == 1)
+>>>>>>> Stashed changes
         {
             param1 = opType2;
             param2 = opType3;

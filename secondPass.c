@@ -9,6 +9,7 @@
 void secPass(char *fileName, gNode *hRow, gNode *hSuspectLabel, gNode *hSymbol, gNode *hEntryExtern, int IC, int DC)
 {
 	/***********************declaration for the proccess************************/
+	printf("here2\n");
 	char filePath[MAXIMUM_FILE_NAME];
 	FILE *binaryFile, *entFile, *extFile;
 	gNode temp;

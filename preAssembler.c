@@ -42,7 +42,9 @@ void compileFile(char *fileName)
 		if ((*ptr == '\r') || (*ptr == '\n'))
 			continue;
 
+		printf("this is ptr1 _%s_\n" , ptr); 
 		ignoreSpaceTab(&ptr);
+		printf("this is ptr2 _%s_\n" , ptr);
 		beginLine = ptr;
 
 		mcr = checkMcrFun(ptr, &isMCR); /*MCR, ENDMCR, NONE, NESTED_MACRO*/

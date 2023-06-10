@@ -47,6 +47,7 @@ void fPass(char *fileName)
 	/***************runs on all the lines*****************/
 	while (fgets(line, sizeof(line), modifiedFile) != NULL)
 	{
+
 		/*intializing the variables*/
 		lineNum += 1;
 		L = 0;
@@ -60,8 +61,10 @@ void fPass(char *fileName)
 		validRowInput = validRow(line, lineNum);
 		if (validRowInput == 0)
 			continue;
-		else if (validRowInput < 0)
+		else if (validRowInput < 0){
 			error = true;
+			printf("error1:_%d_\n",error);
+			}
 
 		nextExpression(&ptr, &count, &wordLength, &word);
 
@@ -87,8 +90,10 @@ void fPass(char *fileName)
 				insert(&hEntryExtern, temp);
 				continue;
 			}
-			else
+			else{
 				error = true;
+				printf("error2:_%d_\n",error);
+		}
 		}
 		else if ((isEntryExtern(word) == EXT))
 		{
@@ -100,8 +105,10 @@ void fPass(char *fileName)
 				insert(&hEntryExtern, temp);
 				continue;
 			}
-			else
+			else{
 				error = true;
+				printf("error3:_%d_\n",error);
+		}
 		}
 		commandIndex = isCommand(word);
 		/*data / string / command / entry / extern*/
@@ -124,7 +131,8 @@ void fPass(char *fileName)
 			if (L < 0)
 			{
 				error = true;
-			}
+				printf("error4:_%d_\n",error);
+		}
 
 			setType(hRow, DATA);
 			ptr = ptr + strlen(ptr);
@@ -146,7 +154,7 @@ void fPass(char *fileName)
 			if (L < 0)
 			{
 				error = true;
-			}
+		}
 			if (label)
 			{
 				setAddress(temp, DC);
@@ -167,7 +175,7 @@ void fPass(char *fileName)
 			if (L < 0)
 			{
 				error = true;
-			}
+		}
 			if (label)
 			{
 				setAddress(temp, IC);
@@ -186,16 +194,16 @@ void fPass(char *fileName)
 		}
 	}
 
+		
 	valid = opernadsTypeCheck(hRow);
 
-	if (!valid)
+	if (!valid){
 		error = true;
-
+}
 	if (!error)
 	{
 		addICtoDataAddress(&hSymbol, IC);
 		addICtoDataAddress(&hRow, IC);
-
 		secPass(fileName, &hRow, &hSuspectLabel, &hSymbol, &hEntryExtern, IC, DC);
 	}
 	else
@@ -498,12 +506,16 @@ int analyzeOperands(bool special, char *ptr, int commandIndex, int *operandType,
 	strcpy(expression, ptr);
 	rowToBinary = createNode(expression, 0);
 	setLineNum(rowToBinary, lineNum);
-
+			printf("i am the eprss%s_\n",expression);
 	token = strtok(ptr, delims);
 
 	while ((token != NULL) && ((endOfLine(token) != EOL)))
 	{
+
 		isImidiate = immidiateCheck(token, rowToBinary, opNum, lineNum);
+		if (isImidiate>0)
+			isImidiate = 1;
+
 		if (isImidiate > 0)
 		{
 			if (firstOp)
@@ -580,11 +592,12 @@ int analyzeOperands(bool special, char *ptr, int commandIndex, int *operandType,
 
 		token = strtok(NULL, delims);
 	}
-
+	printf("what einav%d_\n",isImidiate);
 	setCommand(rowToBinary, commandIndex);
 	setNumOfOps(rowToBinary, opNum);
 	insert(hRow, rowToBinary);
-
+	
+	printf("what theeee%d_\n",isImidiate);
 	if ((operandType[0] == NO_ADDRESS) && (commandIndex < 14)) /*checks if there is no operand. only 14/15 fir op is NON*/
 	{
 		printf("ERROR: invalid instrucion - first operand is not valid in line %d\n", lineNum);
@@ -592,8 +605,11 @@ int analyzeOperands(bool special, char *ptr, int commandIndex, int *operandType,
 	}
 	if (checkValidInstrucion(expression, opNum, commandIndex, operandType, lineNum) <= 0)
 		return -1;
+	
 	else if (isImidiate < 0)
 	{
+
+		printf("im the terror. midi:_%d_\n",isImidiate);
 		return -1;
 	}
 
@@ -608,19 +624,23 @@ int immidiateCheck(char *word, gNode row, int opNum, int lineNum)
 {
 	int i = 0;
 	int digit = 1;
+
 	if (*word == '-' || *word == '+')
 		word += 1;
+		
 
 	while (i <= strlen(word))
 	{
 		if (endOfLine(word + i) == EOL || *(word + i) == ' ' || *(word + i) == '\t' || *(word + i) == ',')
 		{
+			
 			return digit;
 		}
 		digit = digit * isdigit(*(word + i));
+
 		i++;
 	}
-	return false;
+	return -1;
 }
 
 bool isRegister(char *name, gNode row, int index)
