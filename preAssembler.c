@@ -13,9 +13,10 @@ void compileFile(char *fileName)
 	char *ptr, *beginLine; /*ptr - pointer of line		/	beginLine - define the new begining of line without spaces or tabs*/
 	char line[LINE_LEN];   /*array of chars - getting whole line content*/
 	char *mcrName;		   /*macro name*/
+	char endOfLineChar = '\n';
 
 
-	bool isMCR = false;	 /*flag for macro*/
+	bool isMCRO = false;	 /*flag for macro*/
 	bool error = false;
 
 	int mcr = NONE;		  /*note for macro - NONE / MCR / ENDMCR*/
@@ -39,32 +40,44 @@ void compileFile(char *fileName)
 		lineNum += 1;
 		ptr = (char*)&line;
 		lineRealSize = 0;
+		endOfLineChar = '\n';
 		/***************************************/
+		ignoreSpaceTab(&ptr);
 		if ((*ptr == '\r') || (*ptr == '\n'))
 			continue;
-		while (*(ptr + lineRealSize) != '\n')
+		
+
+		ignoreSpaceTab(&ptr);
+		while ((*(ptr + lineRealSize) != '\n') && (*(ptr + lineRealSize) != '\r'))
 		{
 			lineRealSize++;
 		}
-		if ((*(ptr + lineRealSize - 1) == ' ') || (*(ptr + lineRealSize - 1) == '\t'))
+		if (*(ptr + lineRealSize) == '\r')
+			endOfLineChar = '\r';
+
+		while ((*(ptr + lineRealSize - 1) == ' ') || (*(ptr + lineRealSize - 1) == '\t'))
 		{
-			while ((*(ptr + lineRealSize - 1) == ' ') || (*(ptr + lineRealSize - 1) == '\t'))
-			{
-				*(ptr + lineRealSize - 1) = '\n';
-				*(ptr + lineRealSize) = '\0';
-				lineRealSize--;
+
+			*(ptr + lineRealSize - 1) = endOfLineChar;
+			if (endOfLineChar == '\r'){
+				*(ptr + lineRealSize) = '\n';
+				*(ptr + lineRealSize+1) = '\0';
 			}
+			else
+				*(ptr + lineRealSize) = '\0';
+			lineRealSize--;
 		}
-		ignoreSpaceTab(&ptr);
+		
+
 		beginLine = ptr;
 
-		mcr = checkMcrFun(ptr, &isMCR); /*MCR, ENDMCR, NONE, NESTED_MACRO*/
+		mcr = checkMcrFun(ptr, &isMCRO); /*MCR, ENDMCR, NONE, NESTED_MACRO*/
 
-		if (isMCR == true)
+		if (isMCRO == true)
 		{
 			if (mcr == MCR) /*begining of macro declaration*/
 			{
-				ptr = ptr + 3;
+				ptr = ptr + 4;
 				ignoreSpaceTab(&ptr);
 				mcrName = (char *)calloc(strlen(ptr) - 1, sizeof(char));
 				strncpy(mcrName, ptr, strlen(ptr) - 1);
@@ -212,25 +225,25 @@ void extractMcr(gNode node, char **fileName, FILE **modified)
 	fclose(original);
 }
 
-int checkMcrFun(char *beginLine, bool *isMCR)
+int checkMcrFun(char *beginLine, bool *isMCRO)
 {
-	char mcr[] = "mcr";
-	char endmcr[] = "endmcr";
+	char mcro[] = "mcro";
+	char endmcro[] = "endmcro";
 
-	if (((strncmp(beginLine, mcr, 3)) == 0) && ((*(beginLine + 3) == ' ') || (*(beginLine + 3) == '\t'))) /*checks if equal to 'mcr'*/
+	if (((strncmp(beginLine, mcro, 4)) == 0) && ((*(beginLine + 4) == ' ') || (*(beginLine + 4) == '\t'))) /*checks if equal to 'mcro'*/
 	{
-		if (*isMCR == true)
+		if (*isMCRO == true)
 		{
 			printf("ERROR: NESTED MACRO\n");
 			return NESTED_MACRO;
 		}
 
-		*isMCR = true;
+		*isMCRO = true;
 		return MCR;
 	}
-	else if (((strncmp(beginLine, endmcr, 6)) == 0) && ((*(beginLine + 6) == ' ') || (*(beginLine + 6) == '\t') || (*(beginLine + 6) == '\r') || (*(beginLine + 6) == '\n'))) /*checks if equal to 'endmcr'*/
+	else if (((strncmp(beginLine, endmcro, 7)) == 0) && ((*(beginLine + 7) == ' ') || (*(beginLine + 7) == '\t') || (*(beginLine + 7) == '\r') || (*(beginLine + 7) == '\n'))) /*checks if equal to 'endmcro'*/
 	{
-		*isMCR = false;
+		*isMCRO = false;
 		return ENDMCR;
 	}
 	else /*none of them*/

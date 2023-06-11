@@ -9,7 +9,7 @@ mcro einav
     ;i am a note
     sub @r1, @r4
 endmcro
-einav
+ einav
 bne L3
                             
  

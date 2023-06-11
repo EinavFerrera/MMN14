@@ -175,7 +175,11 @@ void writeBinaryParts(FILE *obFile, gNode row, gNode labels)
 
         if (getOpType(row, 1) == DIRECT_REG)
         {
-            op1 = getOp(row, 1) << 7;
+
+            if (i == 1) /*if only 1 operand- the op is in dest place*/
+            	op1 = getOp(row, 1) << 2;
+            else
+            	op1 = getOp(row, 1) << 7;
         }
         if (getOpType(row, 2) == DIRECT_REG)
         {
