@@ -13,14 +13,12 @@ void compileFile(char *fileName)
 	char *ptr, *beginLine; /*ptr - pointer of line		/	beginLine - define the new begining of line without spaces or tabs*/
 	char line[LINE_LEN];   /*array of chars - getting whole line content*/
 	char *mcrName;		   /*macro name*/
-	char *ptrEnd;		   /*pointer to the end of the line*/
 
-	bool isName = false; /*flag for correct name of macro (exp. m1 as the name of macro alredy signed)*/
+
 	bool isMCR = false;	 /*flag for macro*/
 	bool error = false;
 
 	int mcr = NONE;		  /*note for macro - NONE / MCR / ENDMCR*/
-	int macroLines;		  /*counting the num of lines in each macro*/
 	int lineNum = 0;	  /*row number*/
 	int lineRealSize = 0; /*holds the distance from the ptr begining to the \n*/
 
@@ -39,7 +37,7 @@ void compileFile(char *fileName)
 	{
 		/*initializing the variables of new line*/
 		lineNum += 1;
-		ptr = &line;
+		ptr = (char*)&line;
 		lineRealSize = 0;
 		/***************************************/
 		if ((*ptr == '\r') || (*ptr == '\n'))
@@ -178,17 +176,18 @@ void openFiles(char **fileName, FILE **originalFile, FILE **modifiedFile)
  * */
 void extractMcr(gNode node, char **fileName, FILE **modified)
 {
-	char filePath[MAXIMUM_FILE_NAME];
-	sprintf(filePath, "%s.as", *(fileName));
-	FILE *original;
-	original = fopen(filePath, "r");
-
+	char *ptr;
 	int i = 1;
 	int start, end;
 	char line[LINE_LEN];
-	start = getStartMacro(node);
-	end = getEndMacro(node);
-	char *ptr;
+	char filePath[MAXIMUM_FILE_NAME];
+	FILE *original;
+	sprintf(filePath, "%s.as", *(fileName));
+	original = fopen(filePath, "r");
+
+	start = (int)getStartMacro(node);
+	end = (int)getEndMacro(node);
+	
 
 	while (fgets(line, sizeof(line), original) != NULL)
 	{
@@ -200,7 +199,7 @@ void extractMcr(gNode node, char **fileName, FILE **modified)
 		{
 			if (start <= end)
 			{
-				ptr = &line;
+				ptr = (char *)&line;
 				ignoreSpaceTab(&ptr);
 				fputs(ptr, *modified);
 				start += 1;

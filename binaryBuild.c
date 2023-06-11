@@ -21,6 +21,7 @@ char digitToBase64(char *digit)
         return 43;
     if (number == 63) /* return / */
         return 47;
+  return -1;
 }
 
 void binaryCode(FILE *obFile, gNode rowData, gNode labels, int IC)
@@ -41,13 +42,13 @@ void writeCODE(FILE *obFile, gNode rowData, gNode labels)
      * @param param2 define the second param type (bytes 10-11)
      * @param param1 define the first param type (bytes 12-13)
      * */
-    int opCode, opSrc, opDest, opType1, opType2, op1, op2, final;
+    int opCode, opSrc, opDest, opType1, opType2, final;
 
     if (rowData == NULL)
     {
         return;
     }
-    writeCODE(obFile, getNext(rowData), labels);
+    writeCODE(obFile, (gNode)getNext(rowData), labels);
 
     if (getType(rowData) != DATA)
     {
@@ -125,10 +126,7 @@ void writeBinaryParts(FILE *obFile, gNode row, gNode labels)
     */
     int i = getNumOfOps(row);
     int count = 1;
-    int j;
-    int rowAddress;
-    int op1, op2, final, ARE;
-    rowAddress = getAddress(row);
+    int op1, op2, ARE;
     if (getType(row) == JUMP)
     {
         ARE = getAREOfLabel(row, labels, 1);
@@ -206,20 +204,18 @@ void writeBinaryParts(FILE *obFile, gNode row, gNode labels)
 
 void DATAparts(FILE *obFile, gNode rowData)
 {
-    int address, num;
-    int count = 0;
-    char *expression, *originExp;
+
+    char *expression;
 
     if (rowData == NULL)
     {
         return;
     }
-    DATAparts(obFile, getNext(rowData));
+    DATAparts(obFile, (gNode)getNext(rowData));
 
     if (getType(rowData) == DATA)
     {
         expression = getName(rowData);
-        address = getAddress(rowData);
         if ((*expression) != '"') /*data*/
         {
             writeData(obFile, rowData);
@@ -233,11 +229,10 @@ void DATAparts(FILE *obFile, gNode rowData)
 
 void writeData(FILE *obFile, gNode rowData)
 {
-    int address, num;
+    int num;
     int count = 0;
     char *expression, *originExp;
     expression = getName(rowData);
-    address = getAddress(rowData);
     originExp = expression;
     while (true)
     {
@@ -262,11 +257,10 @@ void writeData(FILE *obFile, gNode rowData)
 
 void writeString(FILE *obFile, gNode rowData)
 {
-    int address, num;
+    int num;
     int count = 0;
-    char *expression, *originExp;
+    char *expression;
     expression = getName(rowData);
-    address = getAddress(rowData);
     expression += 1;
     while (*expression != '"')
     {
@@ -333,6 +327,7 @@ int getAddressOfLabel(gNode row, gNode labels, int index)
         else
             return getAddress(search(&labels, getLabel3(row))) + 100;
     }
+        return -1;
 }
 
 int getAREOfLabel(gNode row, gNode labels, int index)
@@ -358,4 +353,5 @@ int getAREOfLabel(gNode row, gNode labels, int index)
         else
             return getARE(search(&labels, getLabel3(row)));
     }
+    return -1;
 }

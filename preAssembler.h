@@ -4,14 +4,11 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include "types.h"
 
 #define MAXIMUM_FILE_NAME 1000 /* max length of file name  */
 #define LINE_LEN 80			   /* max line length */
 #define WORD_LEN 30			   /* max length of word  */
-#define false 0				   /*boolean false*/
-#define true 1				   /*boolean true*/
-
-typedef int bool; /*definition of boolean variable*/
 
 enum macro
 {

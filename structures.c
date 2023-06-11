@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include "structures.h"
+#include "types.h"
 
 /*struct of command table*/
 static const struct opcodeTable
@@ -74,7 +75,7 @@ gNode search(gNode *list, char *name)
 		else
 		{
 			list = getNext(*list);
-			return search(&list, name);
+			return search((gNode *)&list, name);
 		}
 	}
 	else
@@ -98,7 +99,7 @@ gNode cmpListsName(gNode *src, gNode toCmp)
 		temp = search(src, getName(toCmp));
 		if (temp != NULL)
 			return toCmp;
-		toCmp = getNext(toCmp);
+		toCmp = (gNode)getNext(toCmp);
 	}
 	return NULL;
 }
@@ -150,7 +151,7 @@ void deleteNode(gNode *HEAD, gNode deleteNode)
 			}
 		}
 		prev = cur;
-		cur = getNext(cur);
+		cur = (gNode)getNext(cur);
 	}
 }
 
@@ -186,12 +187,12 @@ void setLabel3(gNode list, char label3[])
 	list->label3 = word;
 }
 void setType(gNode list, types type) { list->type = type; }
-void setNext(gNode list, gNode toSet) { list->next = getNext(toSet); }
+void setNext(gNode list, gNode toSet) { list->next = (gNode)(getNext(toSet)); }
 
-char *getName(gNode list) { return list->name; }
+char *getName(gNode list) { return (char *)(list->name); }
 int getLineNum(gNode list) { return list->lineNum; }
-int *getStartMacro(gNode list) { return list->startMacro; }
-int *getEndMacro(gNode list) { return list->endMacro; }
+int *getStartMacro(gNode list) { return (int *)(list->startMacro); }
+int *getEndMacro(gNode list) { return (int *)(list->endMacro); }
 int getAddress(gNode list) { return list->address; }
 int getNumOfOps(gNode list) { return list->numOfOps; }
 int getCommand(gNode list) { return list->commandIndex; }
@@ -202,7 +203,7 @@ char *getLabel1(gNode list) { return list->label1; }
 char *getLabel2(gNode list) { return list->label2; }
 char *getLabel3(gNode list) { return list->label3; }
 types getType(gNode list) { return list->type; }
-gNode *getNext(gNode list) { return list->next; }
+gNode * getNext(gNode list) { return (gNode *)(list->next); }
 
 char *getOpName(int index)
 {

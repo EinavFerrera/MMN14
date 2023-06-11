@@ -29,10 +29,10 @@ int getRegisterNum(char *name)
     return NOT_REGISTER;
 }
 
-char *getRegisterName(int index)
+const char *getRegisterName(int index)
 {
     if ((index < REGISTER_NUM) && (index >= 0))
         return registers[index].name;
     else
-        return NOT_REGISTER;
+        return (char *)NOT_REGISTER;
 }

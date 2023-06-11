@@ -13,8 +13,8 @@ void secPass(char *fileName, gNode *hRow, gNode *hSuspectLabel, gNode *hSymbol, 
 	FILE *binaryFile, *entFile, *extFile;
 	gNode temp;
 	int count = 0;
-	int status;
-	bool error = false;
+
+
 	/***************************************************************************/
 
 	/***checks if there is undeclared labels but written inside instrucions***/
@@ -23,7 +23,7 @@ void secPass(char *fileName, gNode *hRow, gNode *hSuspectLabel, gNode *hSymbol, 
 
 	cmpListCpyDeleteSameName(hEntryExtern, hSuspectLabel, hSymbol);
 
-	if (getName(hSuspectLabel) != NULL)
+	if (getName((gNode)hSuspectLabel) != NULL)
 	{
 		printf("ERROR: Invalid labels was founded - the next labels are not declare properly\n");
 		printLabels(*hSuspectLabel);
@@ -39,7 +39,7 @@ void secPass(char *fileName, gNode *hRow, gNode *hSuspectLabel, gNode *hSymbol, 
 	{
 		if (getType(temp) == ENTRY)
 			count++;
-		temp = getNext(temp);
+		temp = (gNode)getNext(temp);
 	}
 	if (count > 0)
 	{
@@ -66,7 +66,7 @@ void secPass(char *fileName, gNode *hRow, gNode *hSuspectLabel, gNode *hSymbol, 
 				count++;
 			}
 		}
-		temp = getNext(temp);
+		temp = (gNode)getNext(temp);
 	}
 
 	if (count > 0)
@@ -107,7 +107,7 @@ int createEntFile(gNode hEntryExtern, gNode hSymbols, FILE *entFile)
 			fprintf(entFile, "%s\t%d\n", getName(hEntryExtern), 100 + getAddress(search(&hSymbols, getName(hEntryExtern))));
 		}
 	}
-	createEntFile(getNext(hEntryExtern), hSymbols, entFile);
+	createEntFile((gNode)getNext(hEntryExtern), hSymbols, entFile);
 	return 0;
 }
 
@@ -127,7 +127,7 @@ int createExtFile(gNode hEntryExtern, gNode hSymbols, FILE *extFile)
 			fprintf(extFile, "%s\t%d\n", getName(tmp), 100 + getAddress(hSymbols));
 		}
 	}
-	createExtFile(hEntryExtern, getNext(hSymbols), extFile);
+	createExtFile(hEntryExtern, (gNode)getNext(hSymbols), extFile);
 	return 0;
 }
 
@@ -146,14 +146,13 @@ void updateEntExtInSymbols(gNode *hEntExt, gNode *hSymbol)
 				setARE(temp, 1);
 			}
 		}
-		temp = getNext(temp);
+		temp =(gNode) getNext(temp);
 	}
 }
 
 void printLabels(gNode HEAD)
 {
 	gNode tmp = HEAD;
-	int i = 0;
 	while ((tmp != NULL) && (getName(tmp) != NULL))
 	{
 		printf("\n");
@@ -161,7 +160,7 @@ void printLabels(gNode HEAD)
 		printf("adress: %d\t", getAddress(tmp));
 		printf("\tLine Num: %d\n", getLineNum(tmp));
 
-		tmp = getNext(tmp);
+		tmp = (gNode)getNext(tmp);
 	}
 	printf("\n");
 }

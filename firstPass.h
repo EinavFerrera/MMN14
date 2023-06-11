@@ -1,14 +1,11 @@
 #ifndef firstPass
 #define firstPass
-
+#include "types.h"
 #define MAXIMUM_FILE_NAME 1000 /* max length of file name  */
 #define LINE_LEN 80			   /* max line length */
 #define WORD_LEN 30			   /* max length of word  */
 #define MAXIMUM_INST 7		   /* max length of instructor (.string)  */
-#define false 0
-#define true 1
 
-typedef int bool; /*definition of boolean variable*/
 
 enum
 {

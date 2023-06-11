@@ -13,12 +13,10 @@ void fPass(char *fileName)
 
 	/*******************************declaration for the proccess*************************************/
 	FILE *modifiedFile; /*am file - with extracted macro*/
-	FILE *baseFile, *binary;
 	char filePath[MAXIMUM_FILE_NAME]; /*contains the file path - recived from the terminal*/
 	char line[LINE_LEN];			  /*array of chars - getting whole line content*/
 	char *ptr;						  /*pointer of row chars*/
 	char *word;						  /*pointer word - will be declared forward*/
-	FILE *binaryFile;
 	int wordLength;					/*measuring the length of word*/
 	int lineNum = 0;				/*absolute line number in the am file*/
 	int IC = 0;						/*instruction counter*/
@@ -267,6 +265,7 @@ bool labelCheck(char *ptr, char *word, int count, int wordLength, gNode *hSymbol
 			return false;
 		}
 	}
+	return false;
 }
 
 bool validLabel(gNode *list, char *ptr, int lineNum)
@@ -335,7 +334,6 @@ bool isString(char *ptr)
 int isCommand(char *ptr)
 {
 	int i = 0;
-	int length;
 	while (i < NUM_OF_OPCODE)
 	{
 		if ((strcmp(ptr, getOpName(i))) == 0)
@@ -350,11 +348,10 @@ int analyzeData(char *ptr, gNode *hRow, int lineNum)
 	int i = 0;
 	int j = 0;
 	int count = 0;
-	int number;
 	char *ptrOrigin = ptr;
 	char *word;
 	gNode rowToBinary = NULL;
-	char expression[strlen(ptr)];
+	char expression[80];
 	bool error = false;
 	strcpy(expression, ptr);
 
@@ -415,13 +412,18 @@ int analyzeData(char *ptr, gNode *hRow, int lineNum)
 
 int analyzeString(char *ptr, gNode *hRow, int lineNum)
 {
-	ignoreSpaceTab(&ptr);
-	char *ptrOrigin = ptr;
+	
+
 	int i = 0;
 	int count = 0;
 	bool comma[] = {false, false};
 	gNode rowToBinary = NULL;
-	char expression[strlen(ptr)];
+	char expression[80];
+	char *ptrOrigin;
+	
+	ignoreSpaceTab(&ptr);
+	
+	ptrOrigin = ptr;
 	strcpy(expression, ptr);
 
 	if (*ptr == 34)
@@ -474,18 +476,18 @@ int analyzeOperands(bool special, char *ptr, int commandIndex, int *operandType,
 {
 	bool firstOp = true;
 	bool secOp = false;
-	bool reg = false;
+
 
 	gNode rowToBinary = NULL;
 	gNode temp = NULL;
 
 	int isImidiate = 0;
 	int opNum = 0;
-	int i;
+
 
 	char *token = NULL;
 	char delims[] = ", \r\n\t";
-	char expression[strlen(ptr)];
+	char expression[80];
 
 	strcpy(expression, ptr);
 	rowToBinary = createNode(expression, 0);
@@ -644,15 +646,17 @@ bool isRegister(char *name, gNode row, int index)
 bool opernadsTypeCheck(gNode row)
 {
 	bool valid = true;
+	int i;
+	int opType;
+	int command = -1;
+	
 	if (row == NULL)
 	{
 		return true;
 	}
-	valid = opernadsTypeCheck(getNext(row));
+	valid = opernadsTypeCheck((gNode)getNext(row));
+	command = getCommand(row);
 
-	int i;
-	int opType;
-	int command = getCommand(row);
 
 	if (getType(row) == DATA)
 	{
@@ -710,7 +714,6 @@ bool checkValidInstrucion(char *ptr, int opNum, int commandIndex, int *operandTy
 
 	int comma = 0;
 	int i = 0;
-	bool special = false;
 	ignoreSpaceTab(&ptr);
 
 	if (getOpNum(commandIndex) != opNum)
@@ -848,6 +851,6 @@ void addICtoDataAddress(gNode *HEAD, int IC)
 	{
 		if (getType(temp) == DATA)
 			setAddress(temp, getAddress(temp) + IC);
-		temp = getNext(temp);
+		temp = (gNode)getNext(temp);
 	}
 }

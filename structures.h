@@ -1,9 +1,8 @@
 #ifndef structures
 #define NUM_OF_OPCODE 16
-#define false 0 /*boolean false*/
-#define true 1  /*boolean true*/
+#include "types.h"
 
-typedef int bool;                  /*definition of boolean variable*/
+
 typedef struct genericNode *gNode; /*definition of pointer to generic struct*/
 typedef enum types
 { /*definition of instruction rows type*/

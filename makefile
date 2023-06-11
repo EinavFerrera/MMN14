@@ -4,11 +4,11 @@ assembler: main.o preAssembler.o structures.o firstPass.o registerTable.o binary
 	gcc *.c -Wall -ansi -pedantic -o assembler -lm
 main.o: main.c preAssembler.h
 	gcc main.c -Wall -ansi -pedantic -c
-preAssembler.o: preAssembler.c preAssembler.h firstPass.h errors.h structures.h
+preAssembler.o: preAssembler.c preAssembler.h firstPass.h errors.h structures.h types.h
 	gcc preAssembler.c -Wall -ansi -pedantic -c
-structures.o: structures.c structures.h
+structures.o: structures.c structures.h types.h
 	gcc structures.c -Wall -ansi -pedantic -c
-firstPass.o: firstPass.c firstPass.h structures.h registerTable.h secondPass.h
+firstPass.o: firstPass.c firstPass.h structures.h registerTable.h secondPass.h types.h
 	gcc firstPass.c -Wall -ansi -pedantic -c
 secPass.o: secondPass.c secondPass.h structures.h binaryBuild.h
 	gcc secondPass.c -Wall -ansi -pedantic -c
