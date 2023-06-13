@@ -177,7 +177,7 @@ void writeBinaryParts(FILE *obFile, gNode row, gNode labels)
         {
 
             if (i == 1) /*if only 1 operand- the op is in dest place*/
-            	op2 = getOp(row, 1) << 2;
+            	op1 = getOp(row, 1) << 2;
             else
             	op1 = getOp(row, 1) << 7;
         }
