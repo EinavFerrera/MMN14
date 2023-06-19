@@ -496,8 +496,9 @@ int analyzeOperands(bool special, char *ptr, int commandIndex, int *operandType,
 	token = strtok(ptr, delims);
 
 	while ((token != NULL) && ((endOfLine(token) != EOL)))
-	{
+	{	
 		isImidiate = immidiateCheck(token, rowToBinary, opNum, lineNum);
+
 		if (isImidiate > 0)
 		{
 			if (firstOp)
@@ -602,7 +603,7 @@ int analyzeOperands(bool special, char *ptr, int commandIndex, int *operandType,
 int immidiateCheck(char *word, gNode row, int opNum, int lineNum)
 {
 	int i = 0;
-	int digit = 1;
+	int digit = 1;	
 	if (*word == '-' || *word == '+')
 		word += 1;
 
@@ -612,7 +613,10 @@ int immidiateCheck(char *word, gNode row, int opNum, int lineNum)
 		{
 			return digit;
 		}
-		digit = digit * isdigit(*(word + i));
+		if (isdigit(*(word + i)) > 0)
+			digit = digit*1;	
+		else		
+			digit = 0;
 		i++;
 	}
 	return -1;

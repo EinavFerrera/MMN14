@@ -48,6 +48,12 @@ void updateEntExtInSymbols(gNode *hEntExt, gNode *hSymbol);
  * @param HEAD - head of the certain list (suspect label list)
  * */
 void printLabels(gNode HEAD);
-void buildFromBinary(FILE *obFile, FILE *otFile, int IC);
+
+/** cmpListCpyDeleteSameName
+ * run on 2 lists and cmp if have the same label. if does, copy to the third list, and delete form the second
+ * @param src - first to compare
+ * @param willBeDeleted - second to compare, will be delete from if found
+ * @param willBeExtended - will be extend if found
+ * */
 void cmpListCpyDeleteSameName(gNode *src, gNode *willBeDeleted, gNode *willBeExtended);
 #endif

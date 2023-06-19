@@ -111,8 +111,6 @@ int getOpDest(int index);   /*getting the operand dest type (bitmask for IM/DIR/
 bool isMcrValid(char *mcrName); /*checks if the macro name is the name of instructor or directive*/
 
 void freeList(gNode HEAD);
-char digitToBase64(char *);
-char *srcDestConvert(char *);
-void convertTempToSrcDest(const char *temp, char *returnString);
+
 
 #endif

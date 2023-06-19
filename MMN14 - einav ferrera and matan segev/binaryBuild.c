@@ -52,7 +52,7 @@ void writeCODE(FILE *obFile, gNode rowData, gNode labels)
 
     if (getType(rowData) != DATA)
     {
-        opType1 = getOpType(rowData, 1);
+	opType1 = getOpType(rowData, 1);
         opType2 = getOpType(rowData, 2);
 
         if (opType1 == DIRECT_REG)
@@ -93,12 +93,6 @@ void writeCODE(FILE *obFile, gNode rowData, gNode labels)
         [src   ]  [opcode  ]  [dest ]  [ARE]
         */
 
-        /*
-        index:
-         0   1   2   3  4  5  6  7  8  9  10  11 12  13
-        13  12  11  10  9  8  7  6  5  4  3   2  1   0
-        [pa1  ] [par2] [opcode   ] [src] [dest]  [ARE]
-        */
         opDest = opDest << 2;
         opSrc = opSrc << 9;
         opCode = opCode << 5;
@@ -158,8 +152,13 @@ void writeBinaryParts(FILE *obFile, gNode row, gNode labels)
         if (getOpType(row, 2) == DIRECT)
         {
             ARE = getAREOfLabel(row, labels, 2);
+            if (ARE == 1)
+                op2 = 1;
+            else
+            {
             op2 = getAddressOfLabel(row, labels, 2) << 2;
             op2 = op2 + ARE;
+	    }
         }
 
         if (getOpType(row, 1) == IMMEDIATE)
@@ -302,7 +301,7 @@ void writeBinary(int num, FILE *obFile)
     strncpy(Bstr, base64 + 6, 6);
     Bstr[6] = '\0';
     A = digitToBase64(Astr); /* bits 11,10,9,8,7,6 ->base 64*/
-    B = digitToBase64(Bstr); /* bits  5,4,3,2,1,0 ->base 64*/
+    B = digitToBase64(Bstr);  /*bits  5,4,3,2,1,0 ->base 64*/
     fputc(A, obFile);
     fputc(B, obFile);
     fputs("\n", obFile);

@@ -32,7 +32,7 @@ void compileFile(char *fileName)
 	{
 		return;
 	} /*the file path in the terminal is the am file*/
-
+	line[LINE_LEN-1] = '\0';
 	/***************************runs on all the lines**************************/
 	while (fgets(line, sizeof(line), originalFile) != NULL)
 	{
@@ -42,6 +42,10 @@ void compileFile(char *fileName)
 		lineRealSize = 0;
 		endOfLineChar = '\n';
 		/***************************************/
+		if (line[LINE_LEN-1] != '\0'){ /*the line input is more than 80 chars, and overwrite the '\0' initilaized*/
+			printf("ERROR:line %d is more than 80 chars long\n" , lineNum);
+			continue;
+		}
 		ignoreSpaceTab(&ptr);
 		if ((*ptr == '\r') || (*ptr == '\n'))
 			continue;
